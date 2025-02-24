@@ -6,11 +6,18 @@ import {
   DOMWidgetView,
   ISerializers,
 } from '@jupyter-widgets/base';
+import * as d3 from 'd3';
 
 import { MODULE_NAME, MODULE_VERSION } from './version';
+import Graph, { Node, Link } from './graph';
 
 // Import the CSS
 import '../css/widget.css';
+
+interface JsonData {
+  nodes: Node[];
+  links: Link[];
+}
 
 export class NetVisModel extends DOMWidgetModel {
   defaults() {
@@ -22,7 +29,7 @@ export class NetVisModel extends DOMWidgetModel {
       _view_name: NetVisModel.view_name,
       _view_module: NetVisModel.view_module,
       _view_module_version: NetVisModel.view_module_version,
-      value: 'Hello World',
+      value: '',
     };
   }
 
@@ -42,12 +49,21 @@ export class NetVisModel extends DOMWidgetModel {
 export class NetVisView extends DOMWidgetView {
   render() {
     this.el.classList.add('custom-widget');
+    this._svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    this._svg.setAttribute('width', '800');
+    this._svg.setAttribute('height', '800');
+    this._svg.setAttribute('id', 'sample');
+    this.el.appendChild(this._svg);
 
-    this.value_changed();
-    this.model.on('change:value', this.value_changed, this);
+    const value = this.model.get('value');
+    // this.el.textContent = value;
+    const json_data: JsonData = JSON.parse(value);
+    const svg = d3.select(this._svg);
+    Graph(svg, json_data);
   }
 
   value_changed() {
     this.el.textContent = this.model.get('value');
   }
+  private _svg: SVGElement;
 }
