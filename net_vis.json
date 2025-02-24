@@ -1,0 +1,5 @@
+{
+  "load_extensions": {
+    "net_vis/extension": true
+  }
+}
