@@ -49,7 +49,8 @@
     "watch:labextension": "jupyter labextension watch ."
   },
   "dependencies": {
-    "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6"
+    "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6",
+    "d3": "^7.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",
@@ -58,6 +59,7 @@
     "@jupyterlab/builder": "^4.0.11",
     "@lumino/application": "^2.3.0",
     "@lumino/widgets": "^2.3.1",
+    "@types/d3": "^7",
     "@types/jest": "^29.5.11",
     "@types/webpack-env": "^1.18.4",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
@@ -78,7 +80,7 @@
     "style-loader": "^3.3.4",
     "ts-jest": "^29.1.2",
     "ts-loader": "^9.5.1",
-    "typescript": "~5.3.3",
+    "typescript": "~5.4.0",
     "webpack": "^5.90.0",
     "webpack-cli": "^5.1.4"
   },
