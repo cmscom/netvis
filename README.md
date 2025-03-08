@@ -114,7 +114,7 @@ If you make a change to the python code then you will need to restart the notebo
 ## Contributing
 
 Contributions are welcome!  
-For details on how to contribute, please refer to [CONTRIBUTING.md](./CONTRIBUTING.md).
+For details on how to contribute, please refer to [CONTRIBUTING.md](https://github.com/cmscom/netvis/blob/main/CONTRIBUTING.md).
 
 ## Special Thanks
 
