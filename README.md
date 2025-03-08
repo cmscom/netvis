@@ -1,8 +1,5 @@
 # netvis
 
-[![Build Status](https://travis-ci.org/cmscom/netvis.svg?branch=master)](https://travis-ci.org/cmscom/net_vis)
-[![codecov](https://codecov.io/gh/cmscom/netvis/branch/master/graph/badge.svg)](https://codecov.io/gh/cmscom/netvis)
-
 NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless.
 
 ## Installation
@@ -19,6 +16,45 @@ the nbextension:
 ```bash
 jupyter nbextension enable --py [--sys-prefix|--user|--system] net_vis
 ```
+
+## Quick Start
+
+This section provides a simple guide to get started with the project using JupyterLab.
+
+### Example
+
+```
+import net_vis
+data = """
+{
+  "nodes": [
+    {
+      "page_id": 1,
+      "id": "Network"
+    },
+    {
+      "page_id": 2,
+      "id": "Graph"
+    }
+  ],
+  "links": [
+    {
+      "source": "Network",
+      "target": "Graph"
+    }
+  ]
+}
+"""
+
+w = net_vis.NetVis(value=data)
+w
+```
+
+When executed, an SVG network graph is displayed.
+
+- Display Sample
+
+(Diagram will be provided later.)
 
 ## Development Installation
 
@@ -75,17 +111,11 @@ After a change wait for the build to finish and then refresh your browser and th
 
 If you make a change to the python code then you will need to restart the notebook kernel to have it take effect.
 
-## Updating the version
-
-To update the version, install tbump and use it to bump the version.
-By default it will also create a tag.
-
-```bash
-pip install tbump
-tbump <new-version>
-```
-
 ## Contributing
 
 Contributions are welcome!  
 For details on how to contribute, please refer to [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Special Thanks
+
+This project was initiated on the proposal of Shingo Tsuji. His invaluable contributions —from conceptual planning to requirements definition— have been instrumental in bringing this project to fruition. We extend our deepest gratitude for his vision and support.
