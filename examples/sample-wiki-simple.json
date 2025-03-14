@@ -1,0 +1,827 @@
+{
+  "directed": true,
+  "nodes": [
+    {
+      "id": "Group method of data handling"
+    },
+    {
+      "id": "Markov switching multifractal"
+    },
+    {
+      "id": "Google Books Ngram Viewer"
+    },
+    {
+      "id": "Natural language"
+    },
+    {
+      "id": "Separable filter"
+    },
+    {
+      "id": "Semantic folding"
+    },
+    {
+      "id": "Speech recognition software for Linux"
+    },
+    {
+      "id": "Comparison of machine translation applications"
+    },
+    {
+      "id": "Document classification"
+    },
+    {
+      "id": "Log-linear model"
+    },
+    {
+      "id": "Scikit-learn"
+    },
+    {
+      "id": "Principal component analysis"
+    },
+    {
+      "id": "Mycroft (software)"
+    },
+    {
+      "id": "Binary image"
+    },
+    {
+      "id": "Knowledge organization"
+    },
+    {
+      "id": "Hashtag"
+    },
+    {
+      "id": "Semantic similarity network"
+    },
+    {
+      "id": "Microsoft Speech API"
+    },
+    {
+      "id": "Ensemble learning"
+    },
+    {
+      "id": "Logic form"
+    },
+    {
+      "id": "Bag-of-words model"
+    },
+    {
+      "id": "Markov chain Monte Carlo"
+    },
+    {
+      "id": "Kernel method"
+    },
+    {
+      "id": "Support vector machine"
+    },
+    {
+      "id": "Voice portal"
+    },
+    {
+      "id": "Prior knowledge for pattern recognition"
+    },
+    {
+      "id": "Smoothing"
+    },
+    {
+      "id": "Blazegraph"
+    },
+    {
+      "id": "Feature (computer vision)"
+    },
+    {
+      "id": "Speech corpus"
+    },
+    {
+      "id": "Filtered-popping recursive transition network"
+    },
+    {
+      "id": "Trigram tagger"
+    },
+    {
+      "id": "Bag-of-words model in computer vision"
+    },
+    {
+      "id": "String kernel"
+    },
+    {
+      "id": "Mulgara (software)"
+    },
+    {
+      "id": "Absorbing Markov chain"
+    },
+    {
+      "id": "Voice search"
+    },
+    {
+      "id": "Inferential theory of learning"
+    },
+    {
+      "id": "Outline of object recognition"
+    },
+    {
+      "id": "Faceted classification"
+    },
+    {
+      "id": "Computer Science Ontology"
+    },
+    {
+      "id": "Linked data"
+    },
+    {
+      "id": "Decision boundary"
+    },
+    {
+      "id": "Edge detection"
+    },
+    {
+      "id": "Decision tree pruning"
+    },
+    {
+      "id": "IMS VDEX"
+    },
+    {
+      "id": "Multiclass classification"
+    },
+    {
+      "id": "Temporal difference learning"
+    },
+    {
+      "id": "Triplestore"
+    },
+    {
+      "id": "Boosting (machine learning)"
+    },
+    {
+      "id": "Multiplicative weight update method"
+    },
+    {
+      "id": "Marr–Hildreth algorithm"
+    },
+    {
+      "id": "Decision tree learning"
+    },
+    {
+      "id": "Instance selection"
+    },
+    {
+      "id": "NGSI-LD"
+    },
+    {
+      "id": "Examples of Markov chains"
+    },
+    {
+      "id": "Multiple kernel learning"
+    },
+    {
+      "id": "Fluency Voice Technology"
+    },
+    {
+      "id": "Controlled vocabulary"
+    },
+    {
+      "id": "Nuisance variable"
+    },
+    {
+      "id": "Types of artificial neural networks"
+    },
+    {
+      "id": "N-gram"
+    },
+    {
+      "id": "Anil K. Jain (computer scientist, born 1948)"
+    },
+    {
+      "id": "Speech recognition"
+    },
+    {
+      "id": "CLAWS (linguistics)"
+    },
+    {
+      "id": "Bernhard Schölkopf"
+    },
+    {
+      "id": "Folksonomy"
+    },
+    {
+      "id": "Randomized Hough transform"
+    },
+    {
+      "id": "VoxForge"
+    },
+    {
+      "id": "Ellen Hildreth"
+    },
+    {
+      "id": "Scale space"
+    },
+    {
+      "id": "AllegroGraph"
+    },
+    {
+      "id": "Taxonomy"
+    },
+    {
+      "id": "Auto-GPT"
+    },
+    {
+      "id": "Smart speaker"
+    },
+    {
+      "id": "OpenCV"
+    },
+    {
+      "id": "Google matrix"
+    },
+    {
+      "id": "Language model"
+    },
+    {
+      "id": "Alice (virtual assistant)"
+    },
+    {
+      "id": "Spark NLP"
+    },
+    {
+      "id": "Knowledge graph"
+    },
+    {
+      "id": "Optical mark recognition"
+    },
+    {
+      "id": "Semantic search"
+    },
+    {
+      "id": "Random subspace method"
+    },
+    {
+      "id": "Decision list"
+    },
+    {
+      "id": "Markov model"
+    },
+    {
+      "id": "List of chatbots"
+    },
+    {
+      "id": "Blob detection"
+    },
+    {
+      "id": "Pattern recognition"
+    },
+    {
+      "id": "Structured prediction"
+    },
+    {
+      "id": "Recursive transition network"
+    },
+    {
+      "id": "Otsu's method"
+    },
+    {
+      "id": "PyTorch"
+    },
+    {
+      "id": "Part-of-speech tagging"
+    },
+    {
+      "id": "Outline of machine learning"
+    },
+    {
+      "id": "Explanation-based learning"
+    },
+    {
+      "id": "AdaBoost"
+    },
+    {
+      "id": "Brian D. Ripley"
+    },
+    {
+      "id": "Multi-label classification"
+    },
+    {
+      "id": "Language identification"
+    },
+    {
+      "id": "Discrete phase-type distribution"
+    },
+    {
+      "id": "State–action–reward–state–action"
+    },
+    {
+      "id": "Markov chain"
+    },
+    {
+      "id": "Time series"
+    },
+    {
+      "id": "Contextual image classification"
+    },
+    {
+      "id": "Hyperparameter (machine learning)"
+    },
+    {
+      "id": "Wikidata"
+    },
+    {
+      "id": "Library linked data"
+    },
+    {
+      "id": "Vision processing unit"
+    },
+    {
+      "id": "Open Semantic Framework"
+    },
+    {
+      "id": "Virtuoso Universal Server"
+    },
+    {
+      "id": "Pietro Perona"
+    }
+  ],
+  "links": [
+    {
+      "source": "Google Books Ngram Viewer",
+      "target": "N-gram"
+    },
+    {
+      "source": "Natural language",
+      "target": "List of chatbots"
+    },
+    {
+      "source": "Natural language",
+      "target": "Comparison of machine translation applications"
+    },
+    {
+      "source": "Natural language",
+      "target": "Auto-GPT"
+    },
+    {
+      "source": "Semantic folding",
+      "target": "Natural language"
+    },
+    {
+      "source": "Speech recognition software for Linux",
+      "target": "VoxForge"
+    },
+    {
+      "source": "Speech recognition software for Linux",
+      "target": "Speech corpus"
+    },
+    {
+      "source": "Document classification",
+      "target": "Knowledge organization"
+    },
+    {
+      "source": "Document classification",
+      "target": "Taxonomy"
+    },
+    {
+      "source": "Scikit-learn",
+      "target": "Support vector machine"
+    },
+    {
+      "source": "Scikit-learn",
+      "target": "Principal component analysis"
+    },
+    {
+      "source": "Scikit-learn",
+      "target": "Boosting (machine learning)"
+    },
+    {
+      "source": "Scikit-learn",
+      "target": "Multi-label classification"
+    },
+    {
+      "source": "Mycroft (software)",
+      "target": "List of chatbots"
+    },
+    {
+      "source": "Binary image",
+      "target": "Edge detection"
+    },
+    {
+      "source": "Binary image",
+      "target": "Otsu's method"
+    },
+    {
+      "source": "Knowledge organization",
+      "target": "Open Semantic Framework"
+    },
+    {
+      "source": "Semantic similarity network",
+      "target": "Language model"
+    },
+    {
+      "source": "Semantic similarity network",
+      "target": "Taxonomy"
+    },
+    {
+      "source": "Ensemble learning",
+      "target": "Boosting (machine learning)"
+    },
+    {
+      "source": "Logic form",
+      "target": "Natural language"
+    },
+    {
+      "source": "Bag-of-words model",
+      "target": "N-gram"
+    },
+    {
+      "source": "Bag-of-words model",
+      "target": "Bag-of-words model in computer vision"
+    },
+    {
+      "source": "Kernel method",
+      "target": "String kernel"
+    },
+    {
+      "source": "Kernel method",
+      "target": "Multiple kernel learning"
+    },
+    {
+      "source": "Support vector machine",
+      "target": "Bernhard Schölkopf"
+    },
+    {
+      "source": "Support vector machine",
+      "target": "Kernel method"
+    },
+    {
+      "source": "Prior knowledge for pattern recognition",
+      "target": "Pattern recognition"
+    },
+    {
+      "source": "Smoothing",
+      "target": "Time series"
+    },
+    {
+      "source": "Smoothing",
+      "target": "Scale space"
+    },
+    {
+      "source": "Smoothing",
+      "target": "Separable filter"
+    },
+    {
+      "source": "Feature (computer vision)",
+      "target": "Scale space"
+    },
+    {
+      "source": "Feature (computer vision)",
+      "target": "Blob detection"
+    },
+    {
+      "source": "Speech corpus",
+      "target": "Speech recognition"
+    },
+    {
+      "source": "Filtered-popping recursive transition network",
+      "target": "Natural language"
+    },
+    {
+      "source": "Trigram tagger",
+      "target": "N-gram"
+    },
+    {
+      "source": "Faceted classification",
+      "target": "Knowledge organization"
+    },
+    {
+      "source": "Computer Science Ontology",
+      "target": "Knowledge graph"
+    },
+    {
+      "source": "Linked data",
+      "target": "NGSI-LD"
+    },
+    {
+      "source": "Edge detection",
+      "target": "Marr–Hildreth algorithm"
+    },
+    {
+      "source": "Edge detection",
+      "target": "Scale space"
+    },
+    {
+      "source": "Edge detection",
+      "target": "Outline of object recognition"
+    },
+    {
+      "source": "Edge detection",
+      "target": "Randomized Hough transform"
+    },
+    {
+      "source": "Triplestore",
+      "target": "Virtuoso Universal Server"
+    },
+    {
+      "source": "Triplestore",
+      "target": "Mulgara (software)"
+    },
+    {
+      "source": "Triplestore",
+      "target": "AllegroGraph"
+    },
+    {
+      "source": "Triplestore",
+      "target": "Wikidata"
+    },
+    {
+      "source": "Triplestore",
+      "target": "Open Semantic Framework"
+    },
+    {
+      "source": "Boosting (machine learning)",
+      "target": "AdaBoost"
+    },
+    {
+      "source": "Decision tree learning",
+      "target": "AdaBoost"
+    },
+    {
+      "source": "Decision tree learning",
+      "target": "Decision tree pruning"
+    },
+    {
+      "source": "Decision tree learning",
+      "target": "Ensemble learning"
+    },
+    {
+      "source": "Decision tree learning",
+      "target": "Multiclass classification"
+    },
+    {
+      "source": "Decision tree learning",
+      "target": "Outline of machine learning"
+    },
+    {
+      "source": "Examples of Markov chains",
+      "target": "Absorbing Markov chain"
+    },
+    {
+      "source": "Controlled vocabulary",
+      "target": "IMS VDEX"
+    },
+    {
+      "source": "Controlled vocabulary",
+      "target": "Linked data"
+    },
+    {
+      "source": "N-gram",
+      "target": "Language model"
+    },
+    {
+      "source": "N-gram",
+      "target": "Language identification"
+    },
+    {
+      "source": "N-gram",
+      "target": "Markov model"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Language model"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Microsoft Speech API"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Voice portal"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Fluency Voice Technology"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Speech recognition software for Linux"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Voice search"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Smart speaker"
+    },
+    {
+      "source": "Speech recognition",
+      "target": "Alice (virtual assistant)"
+    },
+    {
+      "source": "Folksonomy",
+      "target": "Controlled vocabulary"
+    },
+    {
+      "source": "Folksonomy",
+      "target": "Hashtag"
+    },
+    {
+      "source": "Ellen Hildreth",
+      "target": "Marr–Hildreth algorithm"
+    },
+    {
+      "source": "Smart speaker",
+      "target": "Alice (virtual assistant)"
+    },
+    {
+      "source": "OpenCV",
+      "target": "Outline of object recognition"
+    },
+    {
+      "source": "Knowledge graph",
+      "target": "Wikidata"
+    },
+    {
+      "source": "Optical mark recognition",
+      "target": "Pattern recognition"
+    },
+    {
+      "source": "Semantic search",
+      "target": "Open Semantic Framework"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Time series"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Decision boundary"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Brian D. Ripley"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Group method of data handling"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Decision list"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Types of artificial neural networks"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Contextual image classification"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Anil K. Jain (computer scientist, born 1948)"
+    },
+    {
+      "source": "Pattern recognition",
+      "target": "Vision processing unit"
+    },
+    {
+      "source": "Structured prediction",
+      "target": "Natural language"
+    },
+    {
+      "source": "Structured prediction",
+      "target": "Multi-label classification"
+    },
+    {
+      "source": "Recursive transition network",
+      "target": "Filtered-popping recursive transition network"
+    },
+    {
+      "source": "Part-of-speech tagging",
+      "target": "CLAWS (linguistics)"
+    },
+    {
+      "source": "Part-of-speech tagging",
+      "target": "Structured prediction"
+    },
+    {
+      "source": "Part-of-speech tagging",
+      "target": "Spark NLP"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Principal component analysis"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Temporal difference learning"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Document classification"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Decision boundary"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "State–action–reward–state–action"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Log-linear model"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Decision list"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Explanation-based learning"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Nuisance variable"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Structured prediction"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Random subspace method"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Inferential theory of learning"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Pietro Perona"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Multiplicative weight update method"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "Instance selection"
+    },
+    {
+      "source": "Outline of machine learning",
+      "target": "PyTorch"
+    },
+    {
+      "source": "Language identification",
+      "target": "Document classification"
+    },
+    {
+      "source": "Markov chain",
+      "target": "Examples of Markov chains"
+    },
+    {
+      "source": "Markov chain",
+      "target": "Markov chain Monte Carlo"
+    },
+    {
+      "source": "Markov chain",
+      "target": "Discrete phase-type distribution"
+    },
+    {
+      "source": "Markov chain",
+      "target": "Google matrix"
+    },
+    {
+      "source": "Markov chain",
+      "target": "Markov model"
+    },
+    {
+      "source": "Markov chain",
+      "target": "Markov switching multifractal"
+    },
+    {
+      "source": "Markov chain",
+      "target": "Absorbing Markov chain"
+    },
+    {
+      "source": "Time series",
+      "target": "Markov chain"
+    },
+    {
+      "source": "Hyperparameter (machine learning)",
+      "target": "Support vector machine"
+    },
+    {
+      "source": "Hyperparameter (machine learning)",
+      "target": "Outline of machine learning"
+    },
+    {
+      "source": "Wikidata",
+      "target": "Linked data"
+    },
+    {
+      "source": "Wikidata",
+      "target": "Blazegraph"
+    },
+    {
+      "source": "Library linked data",
+      "target": "Linked data"
+    }
+  ]
+}
