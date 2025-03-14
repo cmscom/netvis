@@ -154,3 +154,8 @@ net_vis/nbextension/index.*
 
 # Packed lab extensions
 net_vis/labextension
+
+VSCode
+
+*.code-workspace
+.yarnrc.yml
