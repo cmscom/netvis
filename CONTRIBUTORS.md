@@ -12,6 +12,7 @@ Below are the key points we understand from [CONTRIBUTING.md](./CONTRIBUTING.md)
 ## Contributors
 
 - **GitHub:** `terapyon`, **Name:** Manabu TERADA, **Date:** 2025-02-24
+- **GitHub:** `karad`, **Name:** Kazuhiro Hara, **Date:** 2025-03-15
 - (example) **GitHub:** `YOUR_ACCOUNT`, **Name:** YOUR NAME, **Date:** SIGNED_DATE
 
 _We sincerely appreciate your valuable contributions!_
