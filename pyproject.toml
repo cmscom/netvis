@@ -8,7 +8,6 @@ build-backend = "hatchling.build"
 
 [project]
 name = "net_vis"
-dynamic = ["version"]
 description = "NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -98,3 +97,6 @@ dependencies = [
 path = "."
 build_cmd = "build:prod"
 npm = ["jlpm"]
+
+[tool.hatch.version]
+source = "nodejs"
