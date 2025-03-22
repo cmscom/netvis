@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.1.1 (Unreleased)
+## 0.1.1 (2025-03-22)
 
 - Modify document links (terapyon)
+- PyPI releases using GitHub Actions (terapyon)
 
 ## 0.1.0 (2025-03-08)
 
