@@ -1,0 +1,140 @@
+{
+  "directed": true,
+  "nodes": [
+    {
+      "name": "Node_0",
+      "size": 13,
+      "category": "Type B",
+      "description": "ABCD",
+      "id": "id_0"
+    },
+    {
+      "name": "Node_1",
+      "size": 13,
+      "category": "Type C",
+      "description": "ABCD",
+      "id": "id_1"
+    },
+    {
+      "name": "Node_2",
+      "size": 35,
+      "category": "Type A",
+      "description": "ABCD",
+      "id": "id_2"
+    },
+    {
+      "name": "Node_3",
+      "size": 14,
+      "category": "Type C",
+      "description": "ABCD",
+      "id": "id_3"
+    },
+    {
+      "name": "Node_4",
+      "size": 64,
+      "category": "Type C",
+      "description": "ABCD",
+      "id": "id_4"
+    },
+    {
+      "name": "Node_5",
+      "size": 40,
+      "category": "Type A",
+      "description": "ABCD",
+      "id": "id_5"
+    },
+    {
+      "name": "Node_6",
+      "size": 18,
+      "category": "Type B",
+      "description": "ABCD",
+      "id": "id_6"
+    },
+    {
+      "name": "Node_7",
+      "size": 57,
+      "category": "Type B",
+      "description": "ABCD",
+      "id": "id_7"
+    },
+    {
+      "name": "Node_8",
+      "size": 74,
+      "category": "Type B",
+      "description": "ABCD",
+      "id": "id_8"
+    },
+    {
+      "name": "Node_9",
+      "size": 56,
+      "category": "Type A",
+      "description": "ABCD",
+      "id": "id_9"
+    }
+  ],
+  "links": [
+    {
+      "name": "Edge_1",
+      "weight": 5.52,
+      "cost": 15,
+      "source": "id_1",
+      "target": "id_4"
+    },
+    {
+      "name": "Edge_1",
+      "weight": 6.66,
+      "cost": 13,
+      "source": "id_1",
+      "target": "id_6"
+    },
+    {
+      "name": "Edge_2",
+      "weight": 6.22,
+      "cost": 20,
+      "source": "id_2",
+      "target": "id_5"
+    },
+    {
+      "name": "Edge_3",
+      "weight": 9.15,
+      "cost": 1,
+      "source": "id_3",
+      "target": "id_7"
+    },
+    {
+      "name": "Edge_5",
+      "weight": 6.53,
+      "cost": 9,
+      "source": "id_5",
+      "target": "id_6"
+    },
+    {
+      "name": "Edge_5",
+      "weight": 2.22,
+      "cost": 10,
+      "source": "id_5",
+      "target": "id_8"
+    },
+    {
+      "name": "Edge_6",
+      "weight": 9.23,
+      "cost": 17,
+      "source": "id_6",
+      "target": "id_9"
+    },
+    {
+      "name": "Edge_7",
+      "weight": 2.57,
+      "cost": 13,
+      "source": "id_7",
+      "target": "id_8"
+    },
+    {
+      "name": "Edge_7",
+      "weight": 8.1,
+      "cost": 11,
+      "source": "id_7",
+      "target": "id_9"
+    }
+  ]
+}
