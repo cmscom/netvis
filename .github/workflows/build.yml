@@ -2,9 +2,11 @@ name: Build-Test
 
 on:
   push:
-    branches: main
+    branches:
+      - main
   pull_request:
-    branches: '*'
+    branches:
+      - '*'
 
 jobs:
   build-test:
@@ -45,14 +47,14 @@ jobs:
           python -m pip install -U codecov
           yarn --version
           yarn config set nodeLinker node-modules
-          
+
           if [ "$RUNNER_OS" == "Windows" ]; then
             yarn install
           else
             YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
           fi
         env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: "false"
+          YARN_ENABLE_IMMUTABLE_INSTALLS: 'false'
 
       - name: Install package
         run: |

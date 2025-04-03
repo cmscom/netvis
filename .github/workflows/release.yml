@@ -3,10 +3,12 @@ name: release
 
 on:
   push:
-    tags:
-      - 'v*'  # タグがプッシュされた時のみ実行（例: v0.1.0, v1.0.0など）
+    branches:
+      - main
 
 jobs:
+  checks-test:
+    uses: ./.github/workflows/build.yaml
   build:
     name: Build distribution 📦
     runs-on: ubuntu-latest
