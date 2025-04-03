@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="net_vis",
-    version="0.1.1",
+    version="0.2.0",
     description="NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab",
     packages=find_packages(),
     install_requires=[
