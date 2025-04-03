@@ -1,10 +1,9 @@
 [build-system]
 requires = [
-    "hatchling>=1.21.1",
-    "jupyterlab>=4.0.0,<5",
-    "hatch-nodejs-version>=0.3.2",
+    "setuptools>=42",
+    "wheel"
 ]
-build-backend = "hatchling.build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "net_vis"
@@ -81,24 +80,24 @@ exclude = [
     ".github",
 ]
 
-[tool.hatch.build.hooks.jupyter-builder]
-build-function = "hatch_jupyter_builder.npm_builder"
-ensured-targets = [
-    "net_vis/nbextension/index.js",
-    "net_vis/labextension/package.json",
-]
-skip-if-exists = [
-    "net_vis/nbextension/index.js",
-    "net_vis/labextension/package.json",
-]
-dependencies = [
-    "hatch-jupyter-builder>=0.8.3",
-]
+# [tool.hatch.build.hooks.jupyter-builder]
+# build-function = "hatch_jupyter_builder.npm_builder"
+# ensured-targets = [
+#     "net_vis/nbextension/index.js",
+#     "net_vis/labextension/package.json",
+# ]
+# skip-if-exists = [
+#     "net_vis/nbextension/index.js",
+#     "net_vis/labextension/package.json",
+# ]
+# dependencies = [
+#     "hatch-jupyter-builder>=0.8.3",
+# ]
+# 
+# [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+# path = "."
+# build_cmd = "build:prod"
+# npm = ["yarn"]
 
-[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
-path = "."
-build_cmd = "build:prod"
-npm = ["yarn"]
-
-[tool.hatch.version]
-source = "nodejs"
+# [tool.hatch.version]
+# source = "nodejs"
