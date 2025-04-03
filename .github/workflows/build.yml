@@ -45,7 +45,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -U codecov
           yarn --version
-          yarn install --mode=skip-build
+          yarn config set nodeLinker node-modules
+          yarn install
 
       - name: Install package
         run: |
