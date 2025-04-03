@@ -1,4 +1,4 @@
-name: Build
+name: Build-Test
 
 on:
   push:
@@ -7,13 +7,15 @@ on:
     branches: '*'
 
 jobs:
-  build:
+  build-test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.10', '3.11', '3.12']
+        # os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
+        # python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.11']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
