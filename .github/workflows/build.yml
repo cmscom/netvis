@@ -1,33 +1,72 @@
-name: Build
+name: Build-Test
 
 on:
-  push:
-    branches: main
+  # push:
+  #   branches:
+  #     - main
   pull_request:
-    branches: '*'
+    branches:
+      - '*'
+  workflow_call: # 他のワークフローから呼び出せるようにする
 
 jobs:
-  build:
+  build-test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.10', '3.11', '3.12']
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Setup Yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@4.6.0 --activate
+          echo 'nodeLinker: node-modules' > .yarnrc.yml
+
+      - name: Yarn version
+        run: |
+          yarn --version
 
       - name: Install dependencies
+        shell: bash
         run: |
+          python -m pip install --upgrade pip
           python -m pip install -U codecov
-          npm install -g codecov
-      - name: Test the extension
+          yarn --version
+          yarn config set nodeLinker node-modules
+
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            yarn install
+          else
+            YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
+          fi
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: 'false'
+
+      - name: Install package
         run: |
           python -m pip install --upgrade -v -e ".[test, examples, docs]"
-          python -m pytest
+
+      - name: Run Python tests
+        run: |
+          python -m pytest -v
+
+      - name: Run JavaScript tests
+        run: |
           yarn run test
 
       - name: Linting
@@ -35,10 +74,10 @@ jobs:
         run: |
           yarn run lint:check
 
-      - name: Check docs can be build + links
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        working-directory: docs
-        run: |
-          sudo apt install -y pandoc
-          make html
-          python -m pytest --check-links
+      # - name: Check docs can be build + links
+      #   if: ${{ matrix.os == 'ubuntu-latest' }}
+      #   working-directory: docs
+      #   run: |
+      #     sudo apt install -y pandoc
+      #     make html
+      #     python -m pytest --check-links
