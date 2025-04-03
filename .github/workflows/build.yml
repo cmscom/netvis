@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - '*'
+  workflow_call: # 他のワークフローから呼び出せるようにする
 
 jobs:
   build-test:
