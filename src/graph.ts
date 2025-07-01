@@ -95,9 +95,13 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
     .attr('d', adjustLinkPath);
 
   const node = g
-    .selectAll('circle')
+    .selectAll('g')
     .data(nodes)
     .enter()
+    .append('g') // グループ要素を追加
+    .classed('node-group', true);
+
+  node
     .append('circle')
     .attr('r', (d: any) => {
       d.radius =
@@ -118,9 +122,48 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
     )
     .classed('circle', true);
 
+  // テキスト（最初は非表示）を追加
+  node
+    .append('text')
+    .text((d: any) => d.name)
+    .attr('y', -20) // ノードの上に表示
+    .attr('text-anchor', 'middle')
+    .style('font-size', '12px')
+    .style('display', 'none');
+
+  // ノードのクリックイベントを統合
+  node
+    .on('mouseover', function (this: SVGGElement, event: any, d: any) {
+      console.log('mouseover', d);
+      d3.select(this).select('text').style('display', 'block');
+    })
+    .on('mouseout', function (this: SVGGElement, event: any, d: any) {
+      console.log('mouseout', d);
+      if (!d3.select(this).classed('clicked')) {
+        d3.select(this).select('text').style('display', 'none');
+      }
+    })
+    .on('click', function (this: SVGGElement, event: any, d: any) {
+      console.log('click', this, d); // thisが正しい要素を指しているか確認
+      const isClicked = d3.select(this).classed('clicked');
+      console.log('isClicked:', isClicked); // 現在の状態を確認
+      d3.select(this).classed('clicked', !isClicked); // クラスのトグル
+      d3.select(this)
+        .select('text')
+        .style('display', isClicked ? 'none' : 'block'); // 表示状態をトグル
+
+      // ドラッグ解除の処理
+      if (isClicked) {
+        delete d.fx;
+        delete d.fy;
+        simulation.alpha(1).restart();
+      }
+    });
+
   simulation.on('tick', () => {
     link.attr('d', adjustLinkPath);
-    node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
+    // node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
+    node.attr('transform', (d: any) => `translate(${d.x},${d.y})`); // グループ全体を移動
   });
 
   const width = 800;
@@ -144,10 +187,10 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
   // Drag Event
   const drag = d3.drag().on('start', dragstart).on('drag', dragged);
 
-  node.call(drag).on('click', click);
+  node.call(drag);
 
   function dragstart() {
-    // d3.select(this).classed('fixed', true);
+    // ドラッグ開始時の処理（必要に応じて追加）
   }
 
   function dragged(event: any, d: any) {
@@ -158,12 +201,6 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
 
   function clamp(x: any, lo: any, hi: any) {
     return x < lo ? lo : x > hi ? hi : x;
-  }
-
-  function click(event: any, d: any) {
-    delete d.fx;
-    delete d.fy;
-    simulation.alpha(1).restart();
   }
 
   return svg.node();
