@@ -125,7 +125,7 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
   // テキスト（最初は非表示）を追加
   node
     .append('text')
-    .text((d: any) => d.name)
+    .text((d: any) => (d.name ? d.name : d.id))
     .attr('y', -20) // ノードの上に表示
     .attr('text-anchor', 'middle')
     .style('font-size', '12px')
