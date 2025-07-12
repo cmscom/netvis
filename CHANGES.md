@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 (2025-07-12)
+
+- bugfix for build version (terapyon)
+
+## 0.3.0 (2025-07-12)
+
+- Add node text (karad)
+
 ## 0.2.0 (2025-04-04)
 
 - Additional styling capabilities for network visualization (karad)
