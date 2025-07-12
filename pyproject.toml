@@ -1,13 +1,14 @@
 [build-system]
 requires = [
-    "setuptools>=42",
-    "wheel"
+    "hatchling>=1.21.1",
+    "jupyterlab>=4.0.0,<5",
+    "hatch-nodejs-version>=0.3.2",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
 
 [project]
 name = "net_vis"
-version = "0.3.0"
+version = "0.3.1"
 # dynamic = ["version"]
 description = "NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless."
 readme = "README.md"
@@ -80,24 +81,21 @@ exclude = [
     ".github",
 ]
 
-# [tool.hatch.build.hooks.jupyter-builder]
-# build-function = "hatch_jupyter_builder.npm_builder"
-# ensured-targets = [
-#     "net_vis/nbextension/index.js",
-#     "net_vis/labextension/package.json",
-# ]
-# skip-if-exists = [
-#     "net_vis/nbextension/index.js",
-#     "net_vis/labextension/package.json",
-# ]
-# dependencies = [
-#     "hatch-jupyter-builder>=0.8.3",
-# ]
-# 
-# [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
-# path = "."
-# build_cmd = "build:prod"
-# npm = ["yarn"]
+[tool.hatch.build.hooks.jupyter-builder]
+build-function = "hatch_jupyter_builder.npm_builder"
+ensured-targets = [
+    "net_vis/nbextension/index.js",
+    "net_vis/labextension/package.json",
+]
+skip-if-exists = [
+    "net_vis/nbextension/index.js",
+    "net_vis/labextension/package.json",
+]
+dependencies = [
+    "hatch-jupyter-builder>=0.8.3",
+]
 
-# [tool.hatch.version]
-# source = "nodejs"
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+path = "."
+build_cmd = "build:prod"
+npm = ["yarn"]
