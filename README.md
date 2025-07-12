@@ -54,7 +54,7 @@ When executed, an SVG network graph is displayed.
 
 - Display Sample
 
-![Desplay Sample](https://github.com/cmscom/netvis/blob/docs/source/_static/img/demo.png)
+![Desplay Sample](https://raw.githubusercontent.com/cmscom/netvis/refs/heads/main/docs/source/_static/img/demo.png)
 
 ## Development Installation
 
