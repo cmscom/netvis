@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "net_vis"
-version = "0.2.0"
+version = "0.3.0"
 # dynamic = ["version"]
 description = "NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless."
 readme = "README.md"
