@@ -50,6 +50,9 @@
   },
   "dependencies": {
     "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6",
+    "@jupyterlab/application": "^3.0.0 || ^4.0.0",
+    "@jupyterlab/rendermime": "^3.0.0 || ^4.0.0",
+    "@jupyterlab/rendermime-interfaces": "^3.0.0 || ^4.0.0",
     "d3": "^7.9.0"
   },
   "devDependencies": {
@@ -92,6 +95,7 @@
   },
   "jupyterlab": {
     "extension": "lib/plugin",
+    "mimeExtension": true,
     "outputDir": "net_vis/labextension/",
     "sharedPackages": {
       "@jupyter-widgets/base": {
@@ -99,6 +103,5 @@
         "singleton": true
       }
     }
-  },
-  "packageManager": "yarn@4.6.0"
+  }
 }

@@ -19,6 +19,11 @@ export interface GraphOptions {
   links: Link[];
 }
 
+export interface GraphData {
+  nodes: Node[];
+  links: Link[];
+}
+
 /**
  * A function that adjusts the link positions between nodes to the edge of the node circle.
  *
@@ -204,6 +209,30 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
   }
 
   return svg.node();
+}
+
+/**
+ * Render a graph into a container element.
+ *
+ * This function wraps the existing Graph() function to make it compatible
+ * with both the widget and MIME renderer architectures.
+ *
+ * @param container - HTML element to render the graph into
+ * @param data - Graph data with nodes and links
+ */
+export function renderGraph(
+  container: HTMLElement,
+  data: GraphData,
+): void {
+  // Create SVG element
+  const svg = d3
+    .select(container)
+    .append('svg')
+    .attr('width', 800)
+    .attr('height', 800);
+
+  // Call existing Graph function with the data
+  Graph(svg, data);
 }
 
 export default Graph;
