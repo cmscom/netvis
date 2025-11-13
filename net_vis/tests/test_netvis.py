@@ -15,23 +15,23 @@ def test_netvis_creation_blank():
 
 
 def test_netvis_creation_with_dict():
-    with pytest.raises(TraitError):
+    # 0.4.0: ValueError (not TraitError) because __init__ validates before super().__init__
+    with pytest.raises(ValueError, match="Value must be a string"):
         w = NetVis(value={"a": 1})
-    # assert isinstance(w.value, str)
-    # assert w.value == '{"a": 1}'
 
 
 def test_netvis_creation_with_list():
-    with pytest.raises(TraitError):
+    # 0.4.0: ValueError (not TraitError) because __init__ validates before super().__init__
+    with pytest.raises(ValueError, match="Value must be a string"):
         w = NetVis(value=[1, 2, 3])
-    # assert isinstance(w.value, str)
-    # assert w.value == "[1, 2, 3]"
 
 
 def test_netvis_creation_with_str():
-    w = NetVis(value='{"a": 1}')
+    # 0.4.0: Must be valid GraphData with nodes and links
+    data = '{"nodes": [{"id": "A"}], "links": []}'
+    w = NetVis(value=data)
     assert isinstance(w.value, str)
-    assert w.value == '{"a": 1}'
+    assert w.value == data
 
 
 # T010: MIME bundle tests

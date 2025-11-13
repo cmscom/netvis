@@ -40,19 +40,29 @@ class NetVis(DOMWidget, ValueWidget):
 
     value = Unicode().tag(sync=True)
 
-    def __init__(self, value: str = None, **kwargs):
+    def __init__(self, **kwargs):
         """
         Initialize NetVis object with graph data validation.
 
         Args:
-            value (str): JSON string containing graph data with 'nodes' and 'links'
+            value (str): JSON string containing graph data with 'nodes' and 'links' (passed via kwargs)
 
         Raises:
             ValueError: If JSON is invalid, nodes/links are missing, or data is inconsistent
         """
-        if value is not None:
-            self._validate_graph_data(value)
-        super().__init__(value=value, **kwargs)
+        # Pre-validate 'value' in kwargs to raise ValueError (not TraitError)
+        # This ensures the API contract is met
+        if 'value' in kwargs:
+            value = kwargs['value']
+            if value is not None and value != "":
+                # Type check
+                if not isinstance(value, str):
+                    raise ValueError(f"Value must be a string, not {type(value).__name__}")
+                # GraphData validation
+                self._validate_graph_data(value)
+
+        # Now call parent init, which will also run _valid_value validator
+        super().__init__(**kwargs)
 
     def _validate_graph_data(self, data: str) -> None:
         """
@@ -64,6 +74,10 @@ class NetVis(DOMWidget, ValueWidget):
         Raises:
             ValueError: If validation fails
         """
+        # Type check: must be string
+        if not isinstance(data, str):
+            raise ValueError(f"Value must be a string, not {type(data).__name__}")
+
         try:
             parsed = json.loads(data)
         except json.JSONDecodeError as e:
@@ -147,13 +161,24 @@ class NetVis(DOMWidget, ValueWidget):
 
     @validate("value")
     def _valid_value(self, proposal):
-        # if isinstance(proposal["value"], str):
-        #     _data = proposal["value"]
-        # elif isinstance(proposal["value"], (dict, list)):
-        #     _data = json.dumps(proposal["value"])
-        # else:
-        #     raise TraitError("Invalid data type: it must be JSON string or dict / list")
         _data = proposal["value"]
+
+        # Type check: only string is allowed (reject dict/list)
+        if not isinstance(_data, str):
+            raise TraitError(f"Value must be a string, not {type(_data).__name__}")
+
+        # Allow empty string (default value)
+        if _data == "":
+            return _data
+
+        # Validate JSON format
         if is_invalid_json(_data):
             raise TraitError("Invalid JSON value: it must be JSON string")
+
+        # Validate GraphData structure (convert ValueError to TraitError)
+        try:
+            self._validate_graph_data(_data)
+        except ValueError as e:
+            raise TraitError(str(e))
+
         return _data
