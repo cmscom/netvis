@@ -8,13 +8,12 @@ import {
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
-import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
-
-import * as widgetExports from './widget';
+// Temporarily commented out for Phase 3 development
+// import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
+// import * as widgetExports from './widget';
+// import { MODULE_NAME, MODULE_VERSION } from './version';
 
 import { NetVisRenderer, MIME_TYPE } from './renderer';
-
-import { MODULE_NAME, MODULE_VERSION } from './version';
 
 const EXTENSION_ID = 'net_vis:plugin';
 
@@ -28,7 +27,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: EXTENSION_ID,
   autoStart: true,
   requires: [IRenderMimeRegistry],
-  optional: [IJupyterWidgetRegistry],
+  // optional: [IJupyterWidgetRegistry], // Temporarily disabled
   activate: activateNetVisExtension,
 };
 
@@ -42,7 +41,6 @@ export default plugin;
 function activateNetVisExtension(
   app: JupyterFrontEnd,
   rendermime: IRenderMimeRegistry,
-  widgetRegistry: IJupyterWidgetRegistry | null,
 ): void {
   // Register MIME renderer for _repr_mimebundle_
   rendermime.addFactory(
@@ -56,7 +54,10 @@ function activateNetVisExtension(
 
   console.log('NetVis MIME renderer registered');
 
-  // Register widget extension for backward compatibility (optional)
+  // TODO: Register widget extension for backward compatibility (optional)
+  // Temporarily disabled to prevent errors during MIME renderer development
+  // Will be re-enabled after Phase 3 completion
+  /*
   if (widgetRegistry) {
     widgetRegistry.registerWidget({
       name: MODULE_NAME,
@@ -65,4 +66,6 @@ function activateNetVisExtension(
     });
     console.log('NetVis widget extension registered');
   }
+  */
+  console.log('NetVis widget extension registration skipped (Phase 3 development)');
 }

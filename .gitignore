@@ -159,3 +159,10 @@ VSCode
 
 *.code-workspace
 .yarnrc.yml
+.devcontainer/
+
+.specify
+specs/
+CLAUDE.md
+.claude/
+IPYWIDGET_TO_MIME.md

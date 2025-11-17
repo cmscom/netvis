@@ -49,9 +49,19 @@ export class NetVisRenderer extends Widget implements IRenderMime.IRenderer {
       // Parse JSON string to GraphData
       const graphData: GraphData = JSON.parse(data.data);
 
+      // Debug logging
+      console.log('NetVis: Rendering graph data:', graphData);
+      console.log('NetVis: Nodes:', graphData.nodes);
+      console.log('NetVis: Links:', graphData.links);
+
       // Validate required fields
       if (!graphData.nodes || !graphData.links) {
         throw new Error('Invalid graph data: missing nodes or links');
+      }
+
+      // Validate nodes have id field
+      if (graphData.nodes.length > 0 && !graphData.nodes[0].id) {
+        throw new Error('Invalid graph data: nodes must have "id" field');
       }
 
       // Clear any existing content
