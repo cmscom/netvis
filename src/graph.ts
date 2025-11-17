@@ -224,6 +224,39 @@ export function renderGraph(
   container: HTMLElement,
   data: GraphData,
 ): void {
+  // Validate data before rendering
+  console.log('[NetVis] renderGraph called with data:', data);
+
+  if (!data) {
+    console.error('[NetVis] Error: data is null or undefined');
+    throw new Error('GraphData is required');
+  }
+
+  if (!data.nodes) {
+    console.error('[NetVis] Error: data.nodes is missing', data);
+    throw new Error('GraphData must have nodes array');
+  }
+
+  if (!data.links) {
+    console.error('[NetVis] Error: data.links is missing', data);
+    throw new Error('GraphData must have links array');
+  }
+
+  console.log(`[NetVis] Rendering ${data.nodes.length} nodes and ${data.links.length} links`);
+
+  // Validate all nodes have id
+  const missingIds = data.nodes.filter((n, i) => {
+    if (!n.id) {
+      console.error(`[NetVis] Node at index ${i} is missing id:`, n);
+      return true;
+    }
+    return false;
+  });
+
+  if (missingIds.length > 0) {
+    throw new Error(`${missingIds.length} nodes are missing 'id' field`);
+  }
+
   // Create SVG element
   const svg = d3
     .select(container)
