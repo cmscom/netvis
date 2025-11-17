@@ -96,7 +96,7 @@
     "@lumino/widgets": "pinned to the latest Lumino 1.x release"
   },
   "jupyterlab": {
-    "mimeExtension": "lib/mime",
+    "mimeExtension": true,
     "outputDir": "net_vis/labextension/",
     "sharedPackages": {
       "@jupyter-widgets/base": {
