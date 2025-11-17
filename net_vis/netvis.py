@@ -11,9 +11,10 @@ This module defines the NetVis widget.
 import json
 from typing import Dict, Any, Optional, Sequence
 
-from ipywidgets import DOMWidget, ValueWidget, register
-from traitlets import Unicode, validate, TraitError
-from ._frontend import module_name, module_version
+# Temporarily disable widget imports for MIME renderer migration
+# from traitlets import Unicode, validate, TraitError
+# from ipywidgets import DOMWidget, ValueWidget, register
+# from ._frontend import module_name, module_version
 from ._version import __version__
 
 
@@ -25,44 +26,47 @@ def is_invalid_json(data):
         return True
 
 
-@register
-class NetVis(DOMWidget, ValueWidget):
+# @register - Temporarily disabled for MIME renderer
+# class NetVis(DOMWidget, ValueWidget):
+class NetVis:
     """NetVis widget.
-    This widget show Network Visualization.
+    This widget show Network Visualization using MIME renderer.
     """
 
-    _model_name = Unicode("NetVisModel").tag(sync=True)
-    _model_module = Unicode(module_name).tag(sync=True)
-    _model_module_version = Unicode(module_version).tag(sync=True)
-    _view_name = Unicode("NetVisView").tag(sync=True)
-    _view_module = Unicode(module_name).tag(sync=True)
-    _view_module_version = Unicode(module_version).tag(sync=True)
+    # Widget traits temporarily disabled for MIME renderer migration
+    # _model_name = Unicode("NetVisModel").tag(sync=True)
+    # _model_module = Unicode(module_name).tag(sync=True)
+    # _model_module_version = Unicode(module_version).tag(sync=True)
+    # _view_name = Unicode("NetVisView").tag(sync=True)
+    # _view_module = Unicode(module_name).tag(sync=True)
+    # _view_module_version = Unicode(module_version).tag(sync=True)
 
-    value = Unicode().tag(sync=True)
+    # value = Unicode().tag(sync=True)
 
-    def __init__(self, **kwargs):
+    # Using regular Python attribute for now
+    value = ""
+
+    def __init__(self, value=None, **kwargs):
         """
         Initialize NetVis object with graph data validation.
 
         Args:
-            value (str): JSON string containing graph data with 'nodes' and 'links' (passed via kwargs)
+            value (str): JSON string containing graph data with 'nodes' and 'links'
 
         Raises:
             ValueError: If JSON is invalid, nodes/links are missing, or data is inconsistent
         """
-        # Pre-validate 'value' in kwargs to raise ValueError (not TraitError)
-        # This ensures the API contract is met
-        if 'value' in kwargs:
-            value = kwargs['value']
-            if value is not None and value != "":
+        # Handle value parameter
+        if value is not None:
+            if value != "":
                 # Type check
                 if not isinstance(value, str):
                     raise ValueError(f"Value must be a string, not {type(value).__name__}")
                 # GraphData validation
                 self._validate_graph_data(value)
-
-        # Now call parent init, which will also run _valid_value validator
-        super().__init__(**kwargs)
+            self.value = value
+        else:
+            self.value = ""
 
     def _validate_graph_data(self, data: str) -> None:
         """
@@ -159,26 +163,27 @@ class NetVis(DOMWidget, ValueWidget):
             'text/plain': 'NetVis Graph'
         }
 
-    @validate("value")
-    def _valid_value(self, proposal):
-        _data = proposal["value"]
-
-        # Type check: only string is allowed (reject dict/list)
-        if not isinstance(_data, str):
-            raise TraitError(f"Value must be a string, not {type(_data).__name__}")
-
-        # Allow empty string (default value)
-        if _data == "":
-            return _data
-
-        # Validate JSON format
-        if is_invalid_json(_data):
-            raise TraitError("Invalid JSON value: it must be JSON string")
-
-        # Validate GraphData structure (convert ValueError to TraitError)
-        try:
-            self._validate_graph_data(_data)
-        except ValueError as e:
-            raise TraitError(str(e))
-
-        return _data
+    # Traitlet validator temporarily disabled for MIME renderer migration
+    # @validate("value")
+    # def _valid_value(self, proposal):
+    #     _data = proposal["value"]
+    #
+    #     # Type check: only string is allowed (reject dict/list)
+    #     if not isinstance(_data, str):
+    #         raise TraitError(f"Value must be a string, not {type(_data).__name__}")
+    #
+    #     # Allow empty string (default value)
+    #     if _data == "":
+    #         return _data
+    #
+    #     # Validate JSON format
+    #     if is_invalid_json(_data):
+    #         raise TraitError("Invalid JSON value: it must be JSON string")
+    #
+    #     # Validate GraphData structure (convert ValueError to TraitError)
+    #     try:
+    #         self._validate_graph_data(_data)
+    #     except ValueError as e:
+    #         raise TraitError(str(e))
+    #
+    #     return _data
