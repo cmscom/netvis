@@ -68,7 +68,11 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
     .forceSimulation(nodes)
     .force(
       'link',
-      d3.forceLink(links).id((d: any) => (d as Node).id.toString()),
+      d3.forceLink(links).id((d: any) => {
+        // Safely access id with null check
+        const node = d as Node;
+        return node && node.id ? String(node.id) : '';
+      }),
     )
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(400, 400));

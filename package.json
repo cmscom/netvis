@@ -94,7 +94,7 @@
     "@lumino/widgets": "pinned to the latest Lumino 1.x release"
   },
   "jupyterlab": {
-    "extension": "lib/plugin",
+    "extension": true,
     "mimeExtension": true,
     "outputDir": "net_vis/labextension/",
     "sharedPackages": {
