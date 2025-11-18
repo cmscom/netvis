@@ -23,7 +23,7 @@ describe('parseGraphData', () => {
 
       expect(result).toEqual({ nodes: [], links: [] });
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Empty data received')
+        expect.stringContaining('Empty data received'),
       );
     });
 
@@ -32,7 +32,7 @@ describe('parseGraphData', () => {
 
       expect(result).toEqual({ nodes: [], links: [] });
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Empty data received')
+        expect.stringContaining('Empty data received'),
       );
     });
   });
@@ -40,28 +40,40 @@ describe('parseGraphData', () => {
   // T022: Invalid JSON handling test
   describe('invalid JSON handling', () => {
     it('should throw error for invalid JSON', () => {
-      expect(() => parseGraphData('invalid json {')).toThrow('Invalid graph data');
+      expect(() => parseGraphData('invalid json {')).toThrow(
+        'Invalid graph data',
+      );
       expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it('should throw error for non-object JSON', () => {
-      expect(() => parseGraphData('"just a string"')).toThrow('Graph data must be an object');
+      expect(() => parseGraphData('"just a string"')).toThrow(
+        'Graph data must be an object',
+      );
     });
 
     it('should throw error for missing nodes array', () => {
-      expect(() => parseGraphData('{"links": []}')).toThrow('Graph data must have a nodes array');
+      expect(() => parseGraphData('{"links": []}')).toThrow(
+        'Graph data must have a nodes array',
+      );
     });
 
     it('should throw error for missing links array', () => {
-      expect(() => parseGraphData('{"nodes": [{"id": "A"}]}')).toThrow('Graph data must have a links array');
+      expect(() => parseGraphData('{"nodes": [{"id": "A"}]}')).toThrow(
+        'Graph data must have a links array',
+      );
     });
 
     it('should throw error for invalid nodes type', () => {
-      expect(() => parseGraphData('{"nodes": "not-an-array", "links": []}')).toThrow('Graph data must have a nodes array');
+      expect(() =>
+        parseGraphData('{"nodes": "not-an-array", "links": []}'),
+      ).toThrow('Graph data must have a nodes array');
     });
 
     it('should throw error for invalid links type', () => {
-      expect(() => parseGraphData('{"nodes": [], "links": "not-an-array"}')).toThrow('Graph data must have a links array');
+      expect(() =>
+        parseGraphData('{"nodes": [], "links": "not-an-array"}'),
+      ).toThrow('Graph data must have a links array');
     });
   });
 
@@ -74,7 +86,8 @@ describe('parseGraphData', () => {
     });
 
     it('should parse complex graph data', () => {
-      const complexData = '{"nodes": [{"id": "A"}, {"id": "B"}], "links": [{"source": "A", "target": "B"}]}';
+      const complexData =
+        '{"nodes": [{"id": "A"}, {"id": "B"}], "links": [{"source": "A", "target": "B"}]}';
       const result = parseGraphData(complexData);
 
       expect(result).toEqual({
@@ -104,7 +117,7 @@ describe('validateVersion', () => {
     validateVersion('0.4.0');
 
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Version check passed: v0.4.0')
+      expect.stringContaining('Version check passed: v0.4.0'),
     );
     expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
@@ -113,13 +126,13 @@ describe('validateVersion', () => {
     validateVersion('0.3.0');
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Version mismatch')
+      expect.stringContaining('Version mismatch'),
     );
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Frontend v0.4.0')
+      expect.stringContaining('Frontend v0.4.0'),
     );
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Backend v0.3.0')
+      expect.stringContaining('Backend v0.3.0'),
     );
   });
 
@@ -127,7 +140,7 @@ describe('validateVersion', () => {
     validateVersion(undefined);
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Backend version information missing')
+      expect.stringContaining('Backend version information missing'),
     );
   });
 
@@ -135,7 +148,7 @@ describe('validateVersion', () => {
     validateVersion('0.4.1');
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Version mismatch')
+      expect.stringContaining('Version mismatch'),
     );
   });
 });
@@ -156,11 +169,14 @@ describe('mimeExtension plugin', () => {
     expect(mimeExtension.id).toMatch(/^[a-z_]+:[a-z_]+$/);
   });
 
-  it('should be configured for autoStart', async () => {
+  it('should have correct extension properties', async () => {
     const mimeExtension = (await import('../mimePlugin')).default;
 
-    // Verify autoStart is true for MIME extensions
-    expect(mimeExtension.autoStart).toBe(true);
+    // JupyterLab 4のIExtensionにはautoStartプロパティなし
+    // 正しいインターフェースプロパティのみテスト
+    expect(mimeExtension.id).toBe('net_vis:mime');
+    expect(mimeExtension.rendererFactory).toBeDefined();
+    expect(mimeExtension.dataType).toBe('json');
   });
 
   // T036: MIME type registration test

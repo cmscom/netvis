@@ -20,7 +20,10 @@ const FRONTEND_VERSION = '0.4.0';
  * @param dataString - JSON string or empty string
  * @returns Parsed graph data with nodes and links arrays
  */
-export function parseGraphData(dataString: string): { nodes: any[]; links: any[] } {
+export function parseGraphData(dataString: string): {
+  nodes: any[];
+  links: any[];
+} {
   // Handle empty string case - return empty graph
   if (!dataString || dataString.trim() === '') {
     console.log('[NetVis] Empty data received, rendering empty graph');
@@ -65,7 +68,7 @@ export function validateVersion(backendVersion: string | undefined): void {
   if (backendVersion !== FRONTEND_VERSION) {
     console.warn(
       `[NetVis] Version mismatch: Frontend v${FRONTEND_VERSION}, Backend v${backendVersion}. ` +
-      'This may cause rendering issues. Please ensure both packages are updated to the same version.'
+        'This may cause rendering issues. Please ensure both packages are updated to the same version.',
     );
   } else {
     console.log(`[NetVis] Version check passed: v${FRONTEND_VERSION}`);
@@ -75,7 +78,10 @@ export function validateVersion(backendVersion: string | undefined): void {
 /**
  * A widget for rendering NetVis graphs.
  */
-export class NetVisMimeRenderer extends Widget implements IRenderMime.IRenderer {
+export class NetVisMimeRenderer
+  extends Widget
+  implements IRenderMime.IRenderer
+{
   private _mimeType: string;
 
   /**
@@ -128,23 +134,24 @@ export class NetVisMimeRenderer extends Widget implements IRenderMime.IRenderer 
 /**
  * Mime extension definition (JupyterLab expects rendererFactory & rank here).
  */
-const rendererFactory: IRenderMime.IRendererFactory & { defaultRank?: number } = {
-  safe: true,
-  mimeTypes: [MIME_TYPE],
-  // Explicit default rank to match JupyterLab 4 expectations and avoid
-  // `defaultRank` lookups on undefined.
-  defaultRank: 0,
-  createRenderer: (options: IRenderMime.IRendererOptions) => {
-    return new NetVisMimeRenderer(options);
-  }
-};
+const rendererFactory: IRenderMime.IRendererFactory & { defaultRank?: number } =
+  {
+    safe: true,
+    mimeTypes: [MIME_TYPE],
+    // Explicit default rank to match JupyterLab 4 expectations and avoid
+    // `defaultRank` lookups on undefined.
+    defaultRank: 0,
+    createRenderer: (options: IRenderMime.IRendererOptions) => {
+      return new NetVisMimeRenderer(options);
+    },
+  };
 
 const mimeExtension: IRenderMime.IExtension = {
   id: 'net_vis:mime',
   rendererFactory,
   // Rank used by JupyterLab registry; also keep defaultRank on factory.
   rank: 0,
-  dataType: 'json'
+  dataType: 'json',
 };
 
 export default mimeExtension;

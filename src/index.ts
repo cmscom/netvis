@@ -5,7 +5,7 @@ export {
   MIME_TYPE,
   NetVisMimeRenderer,
   parseGraphData,
-  validateVersion
+  validateVersion,
 } from './mimePlugin';
 
 export * from './renderer';

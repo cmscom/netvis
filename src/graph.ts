@@ -242,10 +242,7 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
  * @param container - HTML element to render the graph into
  * @param data - Graph data with nodes and links
  */
-export function renderGraph(
-  container: HTMLElement,
-  data: GraphData,
-): void {
+export function renderGraph(container: HTMLElement, data: GraphData): void {
   // Validate data before rendering
   console.log('[NetVis] renderGraph called with data:', data);
 
@@ -264,7 +261,9 @@ export function renderGraph(
     throw new Error('GraphData must have links array');
   }
 
-  console.log(`[NetVis] Rendering ${data.nodes.length} nodes and ${data.links.length} links`);
+  console.log(
+    `[NetVis] Rendering ${data.nodes.length} nodes and ${data.links.length} links`,
+  );
 
   // Validate all nodes have id
   const missingIds = data.nodes.filter((n, i) => {

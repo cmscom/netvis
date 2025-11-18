@@ -11,7 +11,7 @@ module.exports = {
   },
   preset: 'ts-jest/presets/js-with-babel',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  testPathIgnorePatterns: ['/lib/', '/node_modules/'],
+  testPathIgnorePatterns: ['/lib/', '/node_modules/', '/venv/'],
   testRegex: '/__tests__/.*\\.(spec|test)\\.ts[x]?$',
   transformIgnorePatterns: [
     '/node_modules/(?!(d3|d3-.*|@jupyter(lab|-widgets)|@jupyter/.*|internmap|delaunator|robust-predicates)/)',

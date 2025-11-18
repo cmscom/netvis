@@ -44,12 +44,7 @@ describe('D3.js Graph Interactions', () => {
 
     it('should handle graph with multiple components', () => {
       const graphData: GraphData = {
-        nodes: [
-          { id: '1' },
-          { id: '2' },
-          { id: '3' },
-          { id: '4' },
-        ],
+        nodes: [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }],
         links: [
           { source: '1', target: '2' }, // Component 1
           { source: '3', target: '4' }, // Component 2 (disconnected)
@@ -111,17 +106,23 @@ describe('D3.js Graph Interactions', () => {
 
   describe('error handling', () => {
     it('should throw error for null data', () => {
-      expect(() => renderGraph(container, null as any)).toThrow('GraphData is required');
+      expect(() => renderGraph(container, null as any)).toThrow(
+        'GraphData is required',
+      );
     });
 
     it('should throw error for missing nodes', () => {
       const invalidData = { links: [] } as any;
-      expect(() => renderGraph(container, invalidData)).toThrow('GraphData must have nodes array');
+      expect(() => renderGraph(container, invalidData)).toThrow(
+        'GraphData must have nodes array',
+      );
     });
 
     it('should throw error for missing links', () => {
       const invalidData = { nodes: [{ id: 'A' }] } as any;
-      expect(() => renderGraph(container, invalidData)).toThrow('GraphData must have links array');
+      expect(() => renderGraph(container, invalidData)).toThrow(
+        'GraphData must have links array',
+      );
     });
 
     it('should throw error for nodes without id', () => {
@@ -129,7 +130,9 @@ describe('D3.js Graph Interactions', () => {
         nodes: [{ id: 'A' }, {} as any], // Second node missing id
         links: [],
       };
-      expect(() => renderGraph(container, invalidData)).toThrow("nodes are missing 'id' field");
+      expect(() => renderGraph(container, invalidData)).toThrow(
+        "nodes are missing 'id' field",
+      );
     });
   });
 });
