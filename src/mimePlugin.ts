@@ -144,16 +144,34 @@ const mimeExtension: JupyterFrontEndPlugin<void> = {
     /**
      * Create a renderer factory for NetVis data.
      */
-    const factory: IRenderMime.IRendererFactory = {
+    const factory: IRenderMime.IRendererFactory & { defaultRank?: number } = {
       safe: true,
       mimeTypes: [MIME_TYPE],
+      // Explicit default rank to match JupyterLab 4 expectations and avoid
+      // `defaultRank` lookups on undefined.
+      defaultRank: 0,
       createRenderer: (options: IRenderMime.IRendererOptions) => {
         return new NetVisMimeRenderer(options);
       }
     };
 
-    // Register the factory without rank for JupyterLab 4.x
-    rendermime.addFactory(factory);
+    // Register the factory with fallback paths for JL3/JL4
+    try {
+      // Preferred path (JL4): factory carries its defaultRank
+      rendermime.addFactory(factory);
+    } catch (primaryError) {
+      console.warn('[NetVis] Primary factory registration failed, retrying with explicit rank', primaryError);
+      try {
+        // JL3-style explicit rank argument
+        rendermime.addFactory(factory, 0);
+      } catch (fallbackError) {
+        console.error('[NetVis] Failed to register MIME renderer factory', {
+          primaryError,
+          fallbackError
+        });
+        return;
+      }
+    }
 
     console.log(`NetVis MIME renderer registered for ${MIME_TYPE}`);
   }
