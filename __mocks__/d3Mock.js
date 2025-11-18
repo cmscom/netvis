@@ -1,22 +1,70 @@
-// Mock d3 for Jest tests
+// Mock d3 for Jest tests with actual DOM manipulation
+let currentElement = null;
+
+const createD3Selection = (element) => {
+  currentElement = element;
+
+  return {
+    append: jest.fn((tagName) => {
+      const newElement = tagName === 'svg'
+        ? document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        : document.createElementNS('http://www.w3.org/2000/svg', tagName);
+      currentElement.appendChild(newElement);
+      return createD3Selection(newElement);
+    }),
+    attr: jest.fn(function(name, value) {
+      if (currentElement) {
+        currentElement.setAttribute(name, value);
+      }
+      return this;
+    }),
+    style: jest.fn(function(name, value) {
+      if (currentElement) {
+        currentElement.style[name] = value;
+      }
+      return this;
+    }),
+    selectAll: jest.fn(function(selector) {
+      return this;
+    }),
+    data: jest.fn(function() {
+      return this;
+    }),
+    enter: jest.fn(function() {
+      return this;
+    }),
+    exit: jest.fn(function() {
+      return this;
+    }),
+    remove: jest.fn(function() {
+      return this;
+    }),
+    on: jest.fn(function() {
+      return this;
+    }),
+    call: jest.fn(function() {
+      return this;
+    }),
+    classed: jest.fn(function() {
+      return this;
+    }),
+    text: jest.fn(function() {
+      return this;
+    }),
+    select: jest.fn(function() {
+      return this;
+    }),
+    node: jest.fn(() => currentElement),
+  };
+};
+
 module.exports = {
-  select: jest.fn(() => ({
-    append: jest.fn().mockReturnThis(),
-    attr: jest.fn().mockReturnThis(),
-    style: jest.fn().mockReturnThis(),
-    selectAll: jest.fn().mockReturnThis(),
-    data: jest.fn().mockReturnThis(),
-    enter: jest.fn().mockReturnThis(),
-    exit: jest.fn().mockReturnThis(),
-    remove: jest.fn().mockReturnThis(),
-    on: jest.fn().mockReturnThis(),
-    call: jest.fn().mockReturnThis(),
-    classed: jest.fn().mockReturnThis(),
-    text: jest.fn().mockReturnThis(),
-    select: jest.fn().mockReturnThis(),
-    node: jest.fn(() => document.createElementNS('http://www.w3.org/2000/svg', 'svg')),
-    querySelector: jest.fn(),
-  })),
+  select: jest.fn((selector) => {
+    const element = typeof selector === 'string'
+      ? document.querySelector(selector)
+      : selector;
+    return createD3Selection(element);
+  }),
   forceSimulation: jest.fn(() => ({
     force: jest.fn().mockReturnThis(),
     on: jest.fn().mockReturnThis(),
