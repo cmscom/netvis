@@ -8,7 +8,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "net_vis"
-version = "0.3.1"
+version = "0.4.0"
 # dynamic = ["version"]
 description = "NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless."
 readme = "README.md"
@@ -35,7 +35,6 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "ipywidgets>=8.0.0",
 ]
 
 [project.optional-dependencies]
@@ -65,16 +64,13 @@ allow-direct-references = true
 
 [tool.hatch.build]
 artifacts = [
-    "net_vis/nbextension/index.*",
     "net_vis/labextension/*.tgz",
     "net_vis/labextension",
 ]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"net_vis/nbextension" = "share/jupyter/nbextensions/net_vis"
 "net_vis/labextension" = "share/jupyter/labextensions/net_vis"
 "./install.json" = "share/jupyter/labextensions/net_vis/install.json"
-"./net_vis.json" = "etc/jupyter/nbconfig/notebook.d/net_vis.json"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
@@ -84,11 +80,9 @@ exclude = [
 [tool.hatch.build.hooks.jupyter-builder]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "net_vis/nbextension/index.js",
     "net_vis/labextension/package.json",
 ]
 skip-if-exists = [
-    "net_vis/nbextension/index.js",
     "net_vis/labextension/package.json",
 ]
 dependencies = [

@@ -95,3 +95,151 @@ def test_netvis_missing_links():
     data = '{"nodes": [{"id": "A"}]}'
     with pytest.raises(ValueError, match="must contain 'links' array"):
         NetVis(value=data)
+
+
+# T020: Empty data handling test
+def test_empty_data_handling():
+    """Test that NetVis can be created with empty string and returns correct MIME bundle."""
+    # Create NetVis with empty string
+    w = NetVis(value="")
+    assert w.value == ""
+
+    # Check that MIME bundle is still generated correctly
+    bundle = w._repr_mimebundle_()
+    assert "application/vnd.netvis+json" in bundle
+
+    mime_data = bundle["application/vnd.netvis+json"]
+    assert "data" in mime_data
+    assert mime_data["data"] == ""
+    assert "version" in mime_data
+
+
+# T032: MIME bundle structure validation (enhanced from existing test_netvis_mimebundle)
+def test_repr_mimebundle_structure():
+    """Test that _repr_mimebundle_() returns correct structure with all required fields."""
+    data = '{"nodes": [{"id": "A"}, {"id": "B"}], "links": [{"source": "A", "target": "B"}]}'
+    w = NetVis(value=data)
+
+    bundle = w._repr_mimebundle_()
+
+    # Verify MIME bundle keys
+    assert "application/vnd.netvis+json" in bundle
+    assert "text/plain" in bundle
+
+    # Verify custom MIME type structure
+    mime_data = bundle["application/vnd.netvis+json"]
+    assert isinstance(mime_data, dict)
+    assert "data" in mime_data
+    assert "version" in mime_data
+    assert mime_data["data"] == data
+
+    # Verify version is a valid string
+    from ..netvis import __version__
+    assert mime_data["version"] == __version__
+
+
+# T033: Plain text fallback test
+def test_plain_text_fallback():
+    """Test that MIME bundle includes text/plain fallback for environments without custom renderer."""
+    data = '{"nodes": [{"id": "A"}], "links": []}'
+    w = NetVis(value=data)
+
+    bundle = w._repr_mimebundle_()
+
+    # Verify text/plain fallback exists
+    assert "text/plain" in bundle
+    assert isinstance(bundle["text/plain"], str)
+    assert len(bundle["text/plain"]) > 0
+
+    # Should contain meaningful text
+    assert "NetVis" in bundle["text/plain"]
+
+
+# T034: Multiple instances independence test
+def test_multiple_instances():
+    """Test that multiple NetVis instances maintain independent state."""
+    data1 = '{"nodes": [{"id": "A"}], "links": []}'
+    data2 = '{"nodes": [{"id": "B"}, {"id": "C"}], "links": [{"source": "B", "target": "C"}]}'
+
+    # Create two separate instances
+    w1 = NetVis(value=data1)
+    w2 = NetVis(value=data2)
+
+    # Verify they have different data
+    assert w1.value == data1
+    assert w2.value == data2
+    assert w1.value != w2.value
+
+    # Verify their MIME bundles are independent
+    bundle1 = w1._repr_mimebundle_()
+    bundle2 = w2._repr_mimebundle_()
+
+    assert bundle1["application/vnd.netvis+json"]["data"] == data1
+    assert bundle2["application/vnd.netvis+json"]["data"] == data2
+
+    # Modifying one should not affect the other
+    w3 = NetVis(value="")
+    assert w1.value == data1  # w1 unchanged
+    assert w2.value == data2  # w2 unchanged
+
+
+# T069: Large graph test (SC-008: 1000 nodes/2000 links)
+def test_large_graph():
+    """Test that NetVis can handle large graphs without crashing (1000 nodes, 2000 links)."""
+    # Generate large graph data
+    nodes = [{"id": f"node_{i}"} for i in range(1000)]
+
+    # Create 2000 links (each node connects to ~2 others on average)
+    links = []
+    for i in range(1000):
+        # Connect to next two nodes (circular)
+        target1 = (i + 1) % 1000
+        target2 = (i + 2) % 1000
+        links.append({"source": f"node_{i}", "target": f"node_{target1}"})
+        if len(links) < 2000:
+            links.append({"source": f"node_{i}", "target": f"node_{target2}"})
+
+    import json
+    data = json.dumps({"nodes": nodes, "links": links[:2000]})
+
+    # Should create without error
+    w = NetVis(value=data)
+    assert w.value == data
+
+    # Should generate MIME bundle
+    bundle = w._repr_mimebundle_()
+    assert "application/vnd.netvis+json" in bundle
+
+    # Verify data integrity
+    mime_data = bundle["application/vnd.netvis+json"]
+    parsed_data = json.loads(mime_data["data"])
+    assert len(parsed_data["nodes"]) == 1000
+    assert len(parsed_data["links"]) == 2000
+
+
+# T070: Special characters and Unicode in node IDs
+def test_special_characters_in_node_id():
+    """Test that NetVis handles special characters and Unicode in node IDs."""
+    # Test various special characters and Unicode
+    test_cases = [
+        # Special characters
+        '{"nodes": [{"id": "node-with-dash"}, {"id": "node_with_underscore"}], "links": [{"source": "node-with-dash", "target": "node_with_underscore"}]}',
+        # Unicode characters (Japanese)
+        '{"nodes": [{"id": "ノードA"}, {"id": "ノードB"}], "links": [{"source": "ノードA", "target": "ノードB"}]}',
+        # Unicode characters (Emoji)
+        '{"nodes": [{"id": "🔴"}, {"id": "🔵"}], "links": [{"source": "🔴", "target": "🔵"}]}',
+        # Mixed alphanumeric and symbols
+        '{"nodes": [{"id": "Node@123"}, {"id": "Node#456"}], "links": [{"source": "Node@123", "target": "Node#456"}]}',
+        # Spaces in IDs
+        '{"nodes": [{"id": "Node A"}, {"id": "Node B"}], "links": [{"source": "Node A", "target": "Node B"}]}',
+    ]
+
+    for data in test_cases:
+        # Should create without error
+        w = NetVis(value=data)
+        assert w.value == data
+
+        # Should generate valid MIME bundle
+        bundle = w._repr_mimebundle_()
+        assert "application/vnd.netvis+json" in bundle
+        assert bundle["application/vnd.netvis+json"]["data"] == data

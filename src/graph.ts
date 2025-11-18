@@ -1,7 +1,25 @@
 import * as d3 from 'd3';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
-import { Collors, Settings } from './settings';
 import { convertToCategoryKey } from './utils/string';
+
+/**
+ * Settings for the graph (inlined from deleted settings.ts)
+ */
+const Settings = {
+  DEFAULT_NODE_SIZE: 5,
+  DEFAULT_COLOR: 'TYPE_A',
+};
+
+const Collors = {
+  TYPE_A: 'red',
+  TYPE_B: 'blue',
+  TYPE_C: 'green',
+  TYPE_D: 'yellow',
+  TYPE_E: 'purple',
+  TYPE_F: 'orange',
+  TYPE_G: 'black',
+  TYPE_H: 'white',
+};
 
 export interface Node extends SimulationNodeDatum {
   id: string;

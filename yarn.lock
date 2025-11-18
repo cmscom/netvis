@@ -1242,7 +1242,7 @@
     base64-js "^1.2.1"
     sanitize-html "^2.3"
 
-"@jupyter-widgets/base@^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6", "@jupyter-widgets/base@^6.0.11":
+"@jupyter-widgets/base@^6.0.11":
   version "6.0.11"
   resolved "https://registry.yarnpkg.com/@jupyter-widgets/base/-/base-6.0.11.tgz#63c629fe4ce40eae5d83d85f0416dce0b1453edb"
   integrity sha512-s4+UM7DlrhCOqWCh18fSPjOOLWQlKb+vTxHvOQbvwqgwe6pEuncykzZ1vbii71G5RC5tZ+lQblYR1SWDNdq3qQ==

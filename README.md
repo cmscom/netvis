@@ -1,6 +1,8 @@
 # netvis
 
-NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless.
+NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless.
+
+**Version 0.4.0** introduces a MIME renderer architecture that simplifies installation and improves compatibility with modern JupyterLab environments.
 
 ## Installation
 
@@ -10,12 +12,7 @@ You can install using `pip`:
 pip install net_vis
 ```
 
-If you are using Jupyter Notebook 5.2 or earlier, you may also need to enable
-the nbextension:
-
-```bash
-jupyter nbextension enable --py [--sys-prefix|--user|--system] net_vis
-```
+**Note for version 0.4.0+**: The nbextension is no longer required. NetVis now uses a MIME renderer that works automatically in JupyterLab 3.x and 4.x environments.
 
 ## Quick Start
 
@@ -72,24 +69,14 @@ pip install -e ".[test, examples]"
 ```
 
 When developing your extensions, you need to manually enable your extensions with the
-notebook / lab frontend. For lab, this is done by the command:
+JupyterLab frontend. This is done by the command:
 
 ```
 jupyter labextension develop --overwrite .
 jlpm run build
 ```
 
-For classic notebook, you need to run:
-
-```
-jupyter nbextension install --sys-prefix --symlink --overwrite --py net_vis
-jupyter nbextension enable --sys-prefix --py net_vis
-```
-
-Note that the `--symlink` flag doesn't work on Windows, so you will here have to run
-the `install` command every time that you rebuild your extension. For certain installations
-you might also need another flag instead of `--sys-prefix`, but we won't cover the meaning
-of those flags here.
+**Note**: As of version 0.4.0, nbextension support has been removed. NetVis now exclusively uses the MIME renderer architecture for JupyterLab 3.x and 4.x.
 
 ### How to see your changes
 
