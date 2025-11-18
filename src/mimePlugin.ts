@@ -1,12 +1,6 @@
 // Copyright (c) Manabu TERADA
 // Distributed under the terms of the Modified BSD License.
 
-import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin,
-} from '@jupyterlab/application';
-
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { Widget } from '@lumino/widgets';
 
@@ -132,49 +126,25 @@ export class NetVisMimeRenderer extends Widget implements IRenderMime.IRenderer 
 }
 
 /**
- * Extension definition for JupyterLab 4.x
+ * Mime extension definition (JupyterLab expects rendererFactory & rank here).
  */
-const mimeExtension: JupyterFrontEndPlugin<void> = {
-  id: 'net_vis:mime',
-  autoStart: true,
-  requires: [IRenderMimeRegistry],
-  activate: (app: JupyterFrontEnd, rendermime: IRenderMimeRegistry) => {
-    console.log('NetVis MIME extension activation started');
-
-    /**
-     * Create a renderer factory for NetVis data.
-     */
-    const factory: IRenderMime.IRendererFactory & { defaultRank?: number } = {
-      safe: true,
-      mimeTypes: [MIME_TYPE],
-      // Explicit default rank to match JupyterLab 4 expectations and avoid
-      // `defaultRank` lookups on undefined.
-      defaultRank: 0,
-      createRenderer: (options: IRenderMime.IRendererOptions) => {
-        return new NetVisMimeRenderer(options);
-      }
-    };
-
-    // Register the factory with fallback paths for JL3/JL4
-    try {
-      // Preferred path (JL4): factory carries its defaultRank
-      rendermime.addFactory(factory);
-    } catch (primaryError) {
-      console.warn('[NetVis] Primary factory registration failed, retrying with explicit rank', primaryError);
-      try {
-        // JL3-style explicit rank argument
-        rendermime.addFactory(factory, 0);
-      } catch (fallbackError) {
-        console.error('[NetVis] Failed to register MIME renderer factory', {
-          primaryError,
-          fallbackError
-        });
-        return;
-      }
-    }
-
-    console.log(`NetVis MIME renderer registered for ${MIME_TYPE}`);
+const rendererFactory: IRenderMime.IRendererFactory & { defaultRank?: number } = {
+  safe: true,
+  mimeTypes: [MIME_TYPE],
+  // Explicit default rank to match JupyterLab 4 expectations and avoid
+  // `defaultRank` lookups on undefined.
+  defaultRank: 0,
+  createRenderer: (options: IRenderMime.IRendererOptions) => {
+    return new NetVisMimeRenderer(options);
   }
+};
+
+const mimeExtension: IRenderMime.IExtension = {
+  id: 'net_vis:mime',
+  rendererFactory,
+  // Rank used by JupyterLab registry; also keep defaultRank on factory.
+  rank: 0,
+  dataType: 'json'
 };
 
 export default mimeExtension;
