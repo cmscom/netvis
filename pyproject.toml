@@ -33,6 +33,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
 ]
@@ -53,6 +54,8 @@ test = [
     "nbval",
     "pytest-cov",
     "pytest>=6.0",
+    "ruff>=0.8.0",
+    "pyright>=1.1.0",
 ]
 
 [project.urls]
@@ -93,3 +96,42 @@ dependencies = [
 path = "."
 build_cmd = "build:prod"
 npm = ["yarn"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enable pyupgrade (UP) rules and other moderate rules
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "W",    # pycodestyle warnings
+    "UP",   # pyupgrade - modernize Python code
+    "I",    # isort - import sorting
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Allow unused imports in __init__.py
+
+[tool.ruff.format]
+indent-style = "space"
+
+[tool.pyright]
+include = ["net_vis"]
+exclude = [
+    "**/__pycache__",
+    "**/node_modules",
+    ".venv",
+    "venv",
+    "venv-docker",
+]
+pythonVersion = "3.10"
+typeCheckingMode = "basic"
+reportMissingTypeStubs = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+reportUnknownVariableType = false

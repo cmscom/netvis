@@ -1,20 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# Copyright (c) Manabu TERADA.
-# Distributed under the terms of the Modified BSD License.
-
 """
 This module defines the NetVis widget.
 """
 
 import json
-from typing import Dict, Any, Optional, Sequence
+from collections.abc import Sequence
+from typing import Any
 
-# Temporarily disable widget imports for MIME renderer migration
-# from traitlets import Unicode, validate, TraitError
-# from ipywidgets import DOMWidget, ValueWidget, register
-# from ._frontend import module_name, module_version
 from ._version import __version__
 
 
@@ -26,24 +17,11 @@ def is_invalid_json(data):
         return True
 
 
-# @register - Temporarily disabled for MIME renderer
-# class NetVis(DOMWidget, ValueWidget):
 class NetVis:
     """NetVis widget.
     This widget show Network Visualization using MIME renderer.
     """
 
-    # Widget traits temporarily disabled for MIME renderer migration
-    # _model_name = Unicode("NetVisModel").tag(sync=True)
-    # _model_module = Unicode(module_name).tag(sync=True)
-    # _model_module_version = Unicode(module_version).tag(sync=True)
-    # _view_name = Unicode("NetVisView").tag(sync=True)
-    # _view_module = Unicode(module_name).tag(sync=True)
-    # _view_module_version = Unicode(module_version).tag(sync=True)
-
-    # value = Unicode().tag(sync=True)
-
-    # Using regular Python attribute for now
     value = ""
 
     def __init__(self, value=None, **kwargs):
@@ -137,10 +115,8 @@ class NetVis:
                 raise ValueError(f"Link target '{target}' does not exist in nodes")
 
     def _repr_mimebundle_(
-        self,
-        include: Optional[Sequence[str]] = None,
-        exclude: Optional[Sequence[str]] = None
-    ) -> Dict[str, Any]:
+        self, include: Sequence[str] | None = None, exclude: Sequence[str] | None = None
+    ) -> dict[str, Any]:
         """
         Return MIME bundle for JupyterLab rendering.
 
@@ -156,34 +132,6 @@ class NetVis:
             Dict containing MIME bundle with 'application/vnd.netvis+json' and 'text/plain'
         """
         return {
-            'application/vnd.netvis+json': {
-                'data': self.value,
-                'version': __version__
-            },
-            'text/plain': 'NetVis Graph'
+            "application/vnd.netvis+json": {"data": self.value, "version": __version__},
+            "text/plain": "NetVis Graph",
         }
-
-    # Traitlet validator temporarily disabled for MIME renderer migration
-    # @validate("value")
-    # def _valid_value(self, proposal):
-    #     _data = proposal["value"]
-    #
-    #     # Type check: only string is allowed (reject dict/list)
-    #     if not isinstance(_data, str):
-    #         raise TraitError(f"Value must be a string, not {type(_data).__name__}")
-    #
-    #     # Allow empty string (default value)
-    #     if _data == "":
-    #         return _data
-    #
-    #     # Validate JSON format
-    #     if is_invalid_json(_data):
-    #         raise TraitError("Invalid JSON value: it must be JSON string")
-    #
-    #     # Validate GraphData structure (convert ValueError to TraitError)
-    #     try:
-    #         self._validate_graph_data(_data)
-    #     except ValueError as e:
-    #         raise TraitError(str(e))
-    #
-    #     return _data

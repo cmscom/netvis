@@ -1,11 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# Copyright (c) Manabu TERADA.
-# Distributed under the terms of the Modified BSD License.
-
 import pytest
-from traitlets.traitlets import TraitError
+
 from ..netvis import NetVis
 
 
@@ -17,13 +11,13 @@ def test_netvis_creation_blank():
 def test_netvis_creation_with_dict():
     # 0.4.0: ValueError (not TraitError) because __init__ validates before super().__init__
     with pytest.raises(ValueError, match="Value must be a string"):
-        w = NetVis(value={"a": 1})
+        NetVis(value={"a": 1})
 
 
 def test_netvis_creation_with_list():
     # 0.4.0: ValueError (not TraitError) because __init__ validates before super().__init__
     with pytest.raises(ValueError, match="Value must be a string"):
-        w = NetVis(value=[1, 2, 3])
+        NetVis(value=[1, 2, 3])
 
 
 def test_netvis_creation_with_str():
@@ -135,6 +129,7 @@ def test_repr_mimebundle_structure():
 
     # Verify version is a valid string
     from ..netvis import __version__
+
     assert mime_data["version"] == __version__
 
 
@@ -178,7 +173,7 @@ def test_multiple_instances():
     assert bundle2["application/vnd.netvis+json"]["data"] == data2
 
     # Modifying one should not affect the other
-    w3 = NetVis(value="")
+    NetVis(value="")
     assert w1.value == data1  # w1 unchanged
     assert w2.value == data2  # w2 unchanged
 
@@ -200,6 +195,7 @@ def test_large_graph():
             links.append({"source": f"node_{i}", "target": f"node_{target2}"})
 
     import json
+
     data = json.dumps({"nodes": nodes, "links": links[:2000]})
 
     # Should create without error

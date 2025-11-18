@@ -166,3 +166,4 @@ specs/
 CLAUDE.md
 .claude/
 IPYWIDGET_TO_MIME.md
+venv-*/
