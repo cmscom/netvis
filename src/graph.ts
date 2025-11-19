@@ -1,25 +1,7 @@
 import * as d3 from 'd3';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
+import { Collors, Settings } from './settings';
 import { convertToCategoryKey } from './utils/string';
-
-/**
- * Settings for the graph (inlined from deleted settings.ts)
- */
-const Settings = {
-  DEFAULT_NODE_SIZE: 5,
-  DEFAULT_COLOR: 'TYPE_A',
-};
-
-const Collors = {
-  TYPE_A: 'red',
-  TYPE_B: 'blue',
-  TYPE_C: 'green',
-  TYPE_D: 'yellow',
-  TYPE_E: 'purple',
-  TYPE_F: 'orange',
-  TYPE_G: 'black',
-  TYPE_H: 'white',
-};
 
 export interface Node extends SimulationNodeDatum {
   id: string;
@@ -245,22 +227,18 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
 export function renderGraph(container: HTMLElement, data: GraphData): void {
   // Validate data before rendering
   console.log('[NetVis] renderGraph called with data:', data);
-
   if (!data) {
     console.error('[NetVis] Error: data is null or undefined');
     throw new Error('GraphData is required');
   }
-
   if (!data.nodes) {
     console.error('[NetVis] Error: data.nodes is missing', data);
     throw new Error('GraphData must have nodes array');
   }
-
   if (!data.links) {
     console.error('[NetVis] Error: data.links is missing', data);
     throw new Error('GraphData must have links array');
   }
-
   console.log(
     `[NetVis] Rendering ${data.nodes.length} nodes and ${data.links.length} links`,
   );
@@ -273,7 +251,6 @@ export function renderGraph(container: HTMLElement, data: GraphData): void {
     }
     return false;
   });
-
   if (missingIds.length > 0) {
     throw new Error(`${missingIds.length} nodes are missing 'id' field`);
   }
@@ -289,4 +266,4 @@ export function renderGraph(container: HTMLElement, data: GraphData): void {
   Graph(svg, data);
 }
 
-export default Graph;
+// export default Graph;
