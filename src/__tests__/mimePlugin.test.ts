@@ -1,5 +1,3 @@
-// Phase 2 TypeScript tests for MIME renderer helper functions (T021-T023)
-
 import { parseGraphData, validateVersion, MIME_TYPE } from '../mimePlugin';
 
 describe('parseGraphData', () => {
@@ -172,8 +170,8 @@ describe('mimeExtension plugin', () => {
   it('should have correct extension properties', async () => {
     const mimeExtension = (await import('../mimePlugin')).default;
 
-    // JupyterLab 4のIExtensionにはautoStartプロパティなし
-    // 正しいインターフェースプロパティのみテスト
+    // JupyterLab 4 IExtension does not have autoStart property
+    // Test only the correct interface properties
     expect(mimeExtension.id).toBe('net_vis:mime');
     expect(mimeExtension.rendererFactory).toBeDefined();
     expect(mimeExtension.dataType).toBe('json');

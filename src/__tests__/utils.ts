@@ -1,6 +1,3 @@
-// Copyright (c) Jupyter Development Team.
-// Distributed under the terms of the Modified BSD License.
-
 import * as widgets from '@jupyter-widgets/base';
 import * as baseManager from '@jupyter-widgets/base-manager';
 import * as services from '@jupyterlab/services';

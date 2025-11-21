@@ -1,6 +1,3 @@
-// Copyright (c) Manabu TERADA
-// Distributed under the terms of the Modified BSD License.
-
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { Widget } from '@lumino/widgets';
 

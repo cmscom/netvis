@@ -1,5 +1,3 @@
-// T012: TypeScript renderer tests
-
 import { NetVisRenderer } from '../renderer';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 
@@ -230,7 +228,6 @@ describe('NetVisRenderer', () => {
     });
   });
 
-  // T037: Node and link rendering tests
   // Note: These tests verify that the renderer can process node and link data without errors.
   // Full SVG element verification requires integration tests in JupyterLab environment.
   describe('node and link rendering', () => {
@@ -320,7 +317,6 @@ describe('NetVisRenderer', () => {
     });
   });
 
-  // T071: Large graph rendering test
   describe('large graph performance', () => {
     it('should handle large graph (100 nodes, 200 links) without crashing', async () => {
       const renderer = new NetVisRenderer({

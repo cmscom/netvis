@@ -28,7 +28,6 @@ def test_netvis_creation_with_str():
     assert w.value == data
 
 
-# T010: MIME bundle tests
 def test_netvis_mimebundle():
     """Test that NetVis returns correct MIME bundle for JupyterLab."""
     data = '{"nodes": [{"id": "A"}], "links": []}'
@@ -56,7 +55,6 @@ def test_netvis_mimebundle():
     assert isinstance(bundle["text/plain"], str)
 
 
-# T011: Error handling tests
 def test_netvis_invalid_json():
     """Test that invalid JSON raises ValueError."""
     with pytest.raises(ValueError, match="Invalid JSON format"):
@@ -91,7 +89,6 @@ def test_netvis_missing_links():
         NetVis(value=data)
 
 
-# T020: Empty data handling test
 def test_empty_data_handling():
     """Test that NetVis can be created with empty string and returns correct MIME bundle."""
     # Create NetVis with empty string
@@ -108,7 +105,6 @@ def test_empty_data_handling():
     assert "version" in mime_data
 
 
-# T032: MIME bundle structure validation (enhanced from existing test_netvis_mimebundle)
 def test_repr_mimebundle_structure():
     """Test that _repr_mimebundle_() returns correct structure with all required fields."""
     data = '{"nodes": [{"id": "A"}, {"id": "B"}], "links": [{"source": "A", "target": "B"}]}'
@@ -133,7 +129,6 @@ def test_repr_mimebundle_structure():
     assert mime_data["version"] == __version__
 
 
-# T033: Plain text fallback test
 def test_plain_text_fallback():
     """Test that MIME bundle includes text/plain fallback for environments without custom renderer."""
     data = '{"nodes": [{"id": "A"}], "links": []}'
@@ -150,7 +145,6 @@ def test_plain_text_fallback():
     assert "NetVis" in bundle["text/plain"]
 
 
-# T034: Multiple instances independence test
 def test_multiple_instances():
     """Test that multiple NetVis instances maintain independent state."""
     data1 = '{"nodes": [{"id": "A"}], "links": []}'
@@ -178,7 +172,6 @@ def test_multiple_instances():
     assert w2.value == data2  # w2 unchanged
 
 
-# T069: Large graph test (SC-008: 1000 nodes/2000 links)
 def test_large_graph():
     """Test that NetVis can handle large graphs without crashing (1000 nodes, 2000 links)."""
     # Generate large graph data
@@ -213,15 +206,14 @@ def test_large_graph():
     assert len(parsed_data["links"]) == 2000
 
 
-# T070: Special characters and Unicode in node IDs
 def test_special_characters_in_node_id():
     """Test that NetVis handles special characters and Unicode in node IDs."""
     # Test various special characters and Unicode
     test_cases = [
         # Special characters
         '{"nodes": [{"id": "node-with-dash"}, {"id": "node_with_underscore"}], "links": [{"source": "node-with-dash", "target": "node_with_underscore"}]}',
-        # Unicode characters (Japanese)
-        '{"nodes": [{"id": "ノードA"}, {"id": "ノードB"}], "links": [{"source": "ノードA", "target": "ノードB"}]}',
+        # Unicode characters (non-ASCII)
+        '{"nodes": [{"id": "Nöde_Ä"}, {"id": "Nöde_Ö"}], "links": [{"source": "Nöde_Ä", "target": "Nöde_Ö"}]}',
         # Unicode characters (Emoji)
         '{"nodes": [{"id": "🔴"}, {"id": "🔵"}], "links": [{"source": "🔴", "target": "🔵"}]}',
         # Mixed alphanumeric and symbols

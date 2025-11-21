@@ -1,4 +1,3 @@
-// T050-T051: D3.js interaction tests for graph.ts
 // Note: Full D3.js DOM manipulation testing requires integration tests in JupyterLab.
 // These tests verify the API and error handling.
 
@@ -18,7 +17,6 @@ describe('D3.js Graph Interactions', () => {
     document.body.removeChild(container);
   });
 
-  // T050: D3.js simulation initialization test
   describe('force simulation initialization', () => {
     it('should initialize D3 force simulation without errors', () => {
       const graphData: GraphData = {
@@ -55,7 +53,6 @@ describe('D3.js Graph Interactions', () => {
     });
   });
 
-  // T051: Drag event handler tests
   describe('drag and interaction handlers', () => {
     it('should successfully render graph with nodes for drag interaction', () => {
       const graphData: GraphData = {

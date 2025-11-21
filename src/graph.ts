@@ -35,7 +35,7 @@ function adjustLinkPath(d: any) {
   const dy = d.target.y - d.source.y;
   const distance = Math.sqrt(dx * dx + dy * dy);
 
-  // 各ノードが持つ半径を取得（存在しない場合はデフォルト値を設定）
+  // Get node radius (default to 5 if not specified)
   const sourceRadius = d.source.radius || 5;
   const targetRadius = d.target.radius || 5;
 
@@ -82,15 +82,15 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
     .append('marker')
     .attr('id', markerId)
     .attr('viewBox', '0 0 10 10')
-    .attr('refX', 10) // 矢印の位置調整（重要）
+    .attr('refX', 10) // Arrow position adjustment (important)
     .attr('refY', 5)
     .attr('markerWidth', 10)
     .attr('markerHeight', 10)
-    .attr('orient', 'auto'); // 通常の 'auto' でもOK
+    .attr('orient', 'auto'); // Standard 'auto' works fine
   marker
     .append('path')
-    .attr('d', 'M 0 0 L 10 5 L 0 10 z') // 矢印の形
-    .attr('fill', 'black'); // 見やすく
+    .attr('d', 'M 0 0 L 10 5 L 0 10 z') // Arrow shape
+    .attr('fill', 'black'); // For visibility
 
   const link = g
     .selectAll('path')
@@ -100,14 +100,14 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
     .attr('stroke', 'black')
     .attr('stroke-width', 1)
     .attr('fill', 'none')
-    .attr('marker-end', `url(#${markerId})`) // 矢印のIDを指定
+    .attr('marker-end', `url(#${markerId})`) // Reference arrow marker
     .attr('d', adjustLinkPath);
 
   const node = g
     .selectAll('g')
     .data(nodes)
     .enter()
-    .append('g') // グループ要素を追加
+    .append('g') // Add group element
     .classed('node-group', true);
 
   node
@@ -131,16 +131,16 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
     )
     .classed('circle', true);
 
-  // テキスト（最初は非表示）を追加
+  // Add text labels (initially hidden)
   node
     .append('text')
     .text((d: any) => (d.name ? d.name : d.id))
-    .attr('y', -20) // ノードの上に表示
+    .attr('y', -20) // Display above the node
     .attr('text-anchor', 'middle')
     .style('font-size', '12px')
     .style('display', 'none');
 
-  // ノードのクリックイベントを統合
+  // Node click event handling
   node
     .on('mouseover', function (this: SVGGElement, event: any, d: any) {
       console.log('mouseover', d);
@@ -153,15 +153,15 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
       }
     })
     .on('click', function (this: SVGGElement, event: any, d: any) {
-      console.log('click', this, d); // thisが正しい要素を指しているか確認
+      console.log('click', this, d); // Verify this points to the correct element
       const isClicked = d3.select(this).classed('clicked');
-      console.log('isClicked:', isClicked); // 現在の状態を確認
-      d3.select(this).classed('clicked', !isClicked); // クラスのトグル
+      console.log('isClicked:', isClicked); // Check current state
+      d3.select(this).classed('clicked', !isClicked); // Toggle class
       d3.select(this)
         .select('text')
-        .style('display', isClicked ? 'none' : 'block'); // 表示状態をトグル
+        .style('display', isClicked ? 'none' : 'block'); // Toggle visibility
 
-      // ドラッグ解除の処理
+      // Release drag fixing
       if (isClicked) {
         delete d.fx;
         delete d.fy;
@@ -172,7 +172,7 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
   simulation.on('tick', () => {
     link.attr('d', adjustLinkPath);
     // node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
-    node.attr('transform', (d: any) => `translate(${d.x},${d.y})`); // グループ全体を移動
+    node.attr('transform', (d: any) => `translate(${d.x},${d.y})`); // Move entire group
   });
 
   const width = 800;
@@ -199,7 +199,7 @@ function Graph(svg: any, { nodes, links }: { nodes: Node[]; links: Link[] }) {
   node.call(drag);
 
   function dragstart() {
-    // ドラッグ開始時の処理（必要に応じて追加）
+    // Drag start handler (add logic as needed)
   }
 
   function dragged(event: any, d: any) {

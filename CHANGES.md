@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.4.0 (2025-XX-XX)
+## 0.4.0 (2025-11-21)
 
-**Major Release: Migration to MIME Renderer Architecture**
+**Major Release: Migration to MIME Renderer Architecture** (terapyon)
 
 ### Breaking Changes
 
