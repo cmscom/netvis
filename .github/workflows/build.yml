@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,31 +31,12 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Setup Yarn
-        run: |
-          corepack enable
-          corepack prepare yarn@4.6.0 --activate
-          echo 'nodeLinker: node-modules' > .yarnrc.yml
-
-      - name: Yarn version
-        run: |
-          yarn --version
-
       - name: Install dependencies
         shell: bash
         run: |
           python -m pip install --upgrade pip
           python -m pip install -U codecov
-          yarn --version
-          yarn config set nodeLinker node-modules
-
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            yarn install
-          else
-            YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
-          fi
-        env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: 'false'
+          yarn install
 
       - name: Install package
         run: |
@@ -66,6 +47,7 @@ jobs:
           python -m pytest -v
 
       - name: Run JavaScript tests
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           yarn run test
 
@@ -73,6 +55,21 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           yarn run lint:check
+
+      - name: Run ruff check
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          python -m ruff check net_vis
+
+      - name: Run ruff format check
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          python -m ruff format --check net_vis
+
+      - name: Run pyright type check
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          python -m pyright net_vis
 
       # - name: Check docs can be build + links
       #   if: ${{ matrix.os == 'ubuntu-latest' }}

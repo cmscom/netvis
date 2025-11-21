@@ -1,9 +1,8 @@
 /**
- * Settings for the graph.
+ * Settings for the graph
  */
 export const Settings = {
   DEFAULT_NODE_SIZE: 5,
-
   DEFAULT_COLOR: 'TYPE_A',
 };
 
