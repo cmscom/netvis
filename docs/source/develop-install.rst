@@ -9,23 +9,60 @@ the repository::
     git clone https://github.com/cmscom/netvis
     cd netvis
 
-Next, install it with a develop install using pip::
+Create a development environment::
 
-    pip install -e .
+    python -m venv venv-netvis
+    source venv-netvis/bin/activate
+
+Install the Python package with development dependencies::
+
+    pip install -e ".[test, examples, docs]"
+
+Install JavaScript dependencies and set up the JupyterLab extension::
+
+    yarn install
+    jupyter labextension develop --overwrite .
+    yarn run build
 
 
-If you are planning on working on the JS/frontend code, you should also do
-a link installation of the extension::
+Development workflow
+--------------------
 
-    jupyter nbextension install [--sys-prefix / --user / --system] --symlink --py net_vis
+TypeScript development
+^^^^^^^^^^^^^^^^^^^^^^
 
-    jupyter nbextension enable [--sys-prefix / --user / --system] --py net_vis
+To watch for changes and automatically rebuild the extension::
 
-with the `appropriate flag`_. Or, if you are using Jupyterlab::
+    # Terminal 1: Watch TypeScript source
+    yarn run watch
 
-    jupyter labextension install .
+    # Terminal 2: Run JupyterLab
+    jupyter lab
+
+After making changes, wait for the build to finish, then refresh your browser.
+
+Python development
+^^^^^^^^^^^^^^^^^^
+
+If you make changes to the Python code, restart the Jupyter kernel to see the effects.
 
 
-.. links
+Running tests
+-------------
 
-.. _`appropriate flag`: https://jupyter-notebook.readthedocs.io/en/stable/extending/frontend_extensions.html#installing-and-enabling-extensions
+Run Python tests::
+
+    pytest -v
+
+Run TypeScript tests::
+
+    yarn run test
+
+Run linting::
+
+    yarn run lint:check
+    python -m ruff check net_vis
+    python -m pyright net_vis
+
+
+**Note**: As of version 0.4.0, nbextension support has been removed. NetVis now exclusively uses the MIME renderer architecture for JupyterLab 3.x and 4.x.

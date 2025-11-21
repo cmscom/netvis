@@ -20,17 +20,16 @@ This section provides a simple guide to get started with the project using Jupyt
 
 ### Example
 
-```
+```python
 import net_vis
+
 data = """
 {
   "nodes": [
     {
-      "page_id": 1,
       "id": "Network"
     },
     {
-      "page_id": 2,
       "id": "Graph"
     }
   ],
@@ -47,56 +46,57 @@ w = net_vis.NetVis(value=data)
 w
 ```
 
-When executed, an SVG network graph is displayed.
+When executed, an interactive D3.js force-directed graph is displayed.
 
 - Display Sample
 
 ![Desplay Sample](https://github.com/cmscom/netvis/blob/docs/source/_static/img/demo.png)
+
+![JpyterLab Sample](https://github.com/cmscom/netvis/blob/docs/source/_static/img/net-vis-0.4.0.jpg)
 
 ## Development Installation
 
 Create a dev environment:
 
 ```bash
-conda create -n net_vis-dev -c conda-forge nodejs python jupyterlab=4.0.11
-conda activate net_vis-dev
+python -m venv venv-netvis
+source venv-netvis/bin/activate
 ```
 
-Install the python. This will also build the TS package.
+Install the Python package. This will also build the TypeScript package:
 
 ```bash
-pip install -e ".[test, examples]"
+pip install -e ".[test, examples, docs]"
 ```
 
-When developing your extensions, you need to manually enable your extensions with the
-JupyterLab frontend. This is done by the command:
+Install JavaScript dependencies and build the extension:
 
-```
+```bash
+yarn install
 jupyter labextension develop --overwrite .
-jlpm run build
+yarn run build
 ```
 
 **Note**: As of version 0.4.0, nbextension support has been removed. NetVis now exclusively uses the MIME renderer architecture for JupyterLab 3.x and 4.x.
 
 ### How to see your changes
 
-#### Typescript:
+#### TypeScript:
 
-If you use JupyterLab to develop then you can watch the source directory and run JupyterLab at the same time in different
-terminals to watch for changes in the extension's source and automatically rebuild the widget.
+If you use JupyterLab to develop, you can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
 
 ```bash
 # Watch the source directory in one terminal, automatically rebuilding when needed
-jlpm run watch
+yarn run watch
 # Run JupyterLab in another terminal
 jupyter lab
 ```
 
-After a change wait for the build to finish and then refresh your browser and the changes should take effect.
+After a change, wait for the build to finish and then refresh your browser and the changes should take effect.
 
 #### Python:
 
-If you make a change to the python code then you will need to restart the notebook kernel to have it take effect.
+If you make a change to the Python code, you will need to restart the notebook kernel to have it take effect.
 
 ## Contributing
 
