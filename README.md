@@ -50,9 +50,9 @@ When executed, an interactive D3.js force-directed graph is displayed.
 
 - Display Sample
 
-![Desplay Sample](https://github.com/cmscom/netvis/blob/docs/source/_static/img/demo.png)
+![Desplay Sample](https://raw.githubusercontent.com/cmscom/netvis/refs/heads/main/docs/source/_static/img/demo.png)
 
-![JpyterLab Sample](https://github.com/cmscom/netvis/blob/docs/source/_static/img/net-vis-0.4.0.jpg)
+![JpyterLab Sample](https://raw.githubusercontent.com/cmscom/netvis/refs/heads/main/docs/source/_static/img/net-vis-0.4.0.jpg)
 
 ## Development Installation
 
