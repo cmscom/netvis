@@ -8,17 +8,47 @@ NetVis is a package for interactive visualization of Python NetworkX graphs with
 Key Features
 ------------
 
+- **NetworkX Plotter API (v0.5.0)**: Direct visualization of NetworkX graphs without JSON conversion
 - **Interactive D3.js Visualization**: Force-directed graph layout with interactive node dragging, zooming, and panning
-- **Simple Python API**: Works seamlessly with NetworkX graph data structures
+- **Multiple Graph Types**: Support for Graph, DiGraph, MultiGraph, and MultiDiGraph
+- **Layout Control**: 5 built-in algorithms (spring, kamada_kawai, spectral, circular, random) plus custom functions
+- **Custom Styling**: Attribute-based or function-based color and label mapping
 - **MIME Renderer Architecture**: Automatic rendering in JupyterLab 3.x and 4.x without manual extension configuration
-- **Customizable Appearance**: Support for custom node colors, sizes, and categories
 - **Modern Stack**: Built with TypeScript and modern JupyterLab extension architecture
 
 
-Quick Example
--------------
+Quick Example (NetworkX Plotter API)
+-------------------------------------
 
-Here's a simple example to get you started::
+The easiest way to visualize NetworkX graphs (new in v0.5.0)::
+
+    from net_vis import Plotter
+    import networkx as nx
+
+    # Create NetworkX graph
+    G = nx.karate_club_graph()
+
+    # Visualize with one line
+    plotter = Plotter(title="Karate Club Network")
+    plotter.add_networkx(G)
+
+    # Custom styling
+    plotter = Plotter()
+    plotter.add_networkx(
+        G,
+        node_color="club",              # Use 'club' attribute for colors
+        node_label=lambda d: f"Node {d.get('name', '')}",
+        edge_label="weight",
+        layout='kamada_kawai'           # Choose layout algorithm
+    )
+
+When executed in JupyterLab, this displays an interactive force-directed graph.
+
+
+Low-Level API Example
+----------------------
+
+For advanced control, you can use the low-level API with manual JSON::
 
     import net_vis
 
@@ -47,13 +77,43 @@ When executed in JupyterLab, this displays an interactive force-directed graph w
 - **Click nodes** to pin/unpin them
 
 
+What's New in 0.5.0
+-------------------
+
+Version 0.5.0 introduces the **NetworkX Plotter API**, a high-level interface for visualizing NetworkX graphs:
+
+**NetworkX Plotter API**
+    - Direct visualization of NetworkX graph objects without manual JSON conversion
+    - Support for all 4 NetworkX graph types: Graph, DiGraph, MultiGraph, MultiDiGraph
+    - Automatic node and edge extraction with full attribute preservation
+
+**Layout Control**
+    - 5 built-in layout algorithms: spring, kamada_kawai, spectral, circular, random
+    - Custom layout function support
+    - Automatic fallback for invalid positions (NaN/inf)
+
+**Custom Styling**
+    - Node color mapping via attribute names or callable functions
+    - Node label mapping with flexible attribute selection
+    - Edge label mapping for relationship visualization
+    - Automatic color scale detection (continuous vs. categorical)
+
+**Multi-Graph Type Support**
+    - Edge direction preservation for DiGraph (stored in metadata)
+    - Edge key preservation for MultiGraph/MultiDiGraph
+    - Multiple edges expanded to independent Edge objects
+    - Automatic graph type detection and dispatch
+
+See the :doc:`examples/index` for complete usage examples.
+
+
 Architecture (v0.4.0)
 ---------------------
 
-Version 0.4.0 introduces a major architectural change:
+Version 0.4.0 introduced a major architectural change:
 
 **MIME Renderer**
-    NetVis now uses JupyterLab's MIME renderer system instead of ipywidgets. This means:
+    NetVis uses JupyterLab's MIME renderer system instead of ipywidgets. This means:
 
     - Simpler installation (no manual extension enabling)
     - Better performance and integration with JupyterLab
@@ -62,19 +122,8 @@ Version 0.4.0 introduces a major architectural change:
 **JupyterLab Only**
     NetVis 0.4.0+ exclusively supports JupyterLab 3.x and 4.x. Jupyter Notebook Classic is no longer supported.
 
-**Python API Unchanged**
-    Despite the internal changes, the Python API remains 100% compatible with previous versions.
-
-
-What's New in 0.4.0
--------------------
-
-- **MIME renderer architecture** replacing ipywidgets
-- **Simplified installation** - just ``pip install net_vis``
-- **Removed nbextension support** - JupyterLab only
-- **Python 3.10+ support** including 3.13 and 3.14
-- **Comprehensive test suite** with 41 TypeScript tests and 16 Python tests
-- **Code quality tools** - ruff and pyright for Python linting and type checking
+**Python API**
+    The low-level NetVis API remains compatible with previous versions, and the new Plotter API provides a higher-level interface.
 
 
 Migrating from 0.3.x

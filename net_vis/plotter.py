@@ -10,7 +10,38 @@ class Plotter:
     """Main API for visualizing NetworkX graphs in JupyterLab.
 
     Provides a simple interface to convert NetworkX graph objects into
-    interactive visualizations using the netvis MIME renderer.
+    interactive visualizations using the netvis MIME renderer. Supports
+    all NetworkX graph types (Graph, DiGraph, MultiGraph, MultiDiGraph)
+    with automatic attribute preservation and customizable styling.
+
+    Examples:
+        Basic visualization:
+            >>> from net_vis import Plotter
+            >>> import networkx as nx
+            >>> G = nx.karate_club_graph()
+            >>> plotter = Plotter(title="Karate Club")
+            >>> plotter.add_networkx(G)
+
+        Custom styling with attribute mapping:
+            >>> plotter = Plotter()
+            >>> plotter.add_networkx(
+            ...     G,
+            ...     node_color="club",
+            ...     node_label="name",
+            ...     layout='kamada_kawai'
+            ... )
+
+        Custom styling with functions:
+            >>> plotter.add_networkx(
+            ...     G,
+            ...     node_color=lambda d: f"group_{d.get('club', 0)}",
+            ...     node_label=lambda d: f"Node {d.get('id', '')}",
+            ...     edge_label=lambda d: f"w={d.get('weight', 1.0)}"
+            ... )
+
+    Attributes:
+        _scene: Internal Scene object containing all visualization layers
+        _layer_counter: Counter for auto-generating unique layer IDs
     """
 
     def __init__(self, title: str | None = None) -> None:
@@ -44,21 +75,68 @@ class Plotter:
     ) -> str:
         """Add NetworkX graph as visualization layer.
 
+        Converts a NetworkX graph to a visualization layer with automatic
+        node/edge extraction, layout computation, and styling. Supports all
+        NetworkX graph types with automatic type detection.
+
         Args:
-            graph: NetworkX graph object (Graph/DiGraph/MultiGraph/MultiDiGraph)
-            layer_id: Custom layer ID (auto-generated if None)
-            layout: Layout algorithm name ('spring'/'kamada_kawai'/'spectral'/'circular'/'random')
-                   or custom function (Graph -> dict[node, (x,y)]), or None to use existing 'pos' attribute
-            node_color: Attribute name (str) or function (node_data -> color_value)
-            node_label: Attribute name (str) or function (node_data -> label_str)
-            edge_label: Attribute name (str) or function (edge_data -> label_str)
+            graph: NetworkX graph object (Graph/DiGraph/MultiGraph/MultiDiGraph).
+                All node and edge attributes are preserved in metadata.
+            layer_id: Custom layer ID (auto-generated if None).
+            layout: Layout algorithm or custom function:
+                - 'spring': Force-directed layout (default)
+                - 'kamada_kawai': Kamada-Kawai path-length cost minimization
+                - 'spectral': Spectral layout using graph Laplacian
+                - 'circular': Nodes arranged in a circle
+                - 'random': Random node positions
+                - callable: Custom function(graph) -> dict[node_id, (x, y)]
+                - None: Use existing 'pos' attribute or fall back to spring
+            node_color: Node color mapping:
+                - str: Attribute name to use for color values
+                - callable: Function(node_data) -> color_value
+                - None: No color mapping (default)
+            node_label: Node label mapping:
+                - str: Attribute name to use for labels
+                - callable: Function(node_data) -> label_string
+                - None: No label mapping (default)
+            edge_label: Edge label mapping:
+                - str: Attribute name to use for labels
+                - callable: Function(edge_data) -> label_string
+                - None: No label mapping (default)
 
         Returns:
-            layer_id: ID of the added layer
+            str: ID of the added layer (auto-generated or custom)
 
         Raises:
-            ValueError: If graph is invalid or layout computation fails
-            TypeError: If graph is not a NetworkX graph type
+            TypeError: If graph is not a NetworkX graph object
+            ValueError: If layout computation fails
+
+        Examples:
+            Basic usage:
+                >>> plotter = Plotter()
+                >>> G = nx.karate_club_graph()
+                >>> layer_id = plotter.add_networkx(G)
+
+            With layout control:
+                >>> plotter.add_networkx(G, layout='kamada_kawai')
+
+            With attribute-based styling:
+                >>> G.nodes[0]['color'] = 'red'
+                >>> plotter.add_networkx(G, node_color='color')
+
+            With function-based styling:
+                >>> plotter.add_networkx(
+                ...     G,
+                ...     node_color=lambda d: 'red' if d.get('club') == 0 else 'blue',
+                ...     node_label=lambda d: f"Node {d.get('id', '')}"
+                ... )
+
+        Notes:
+            - All graph types (Graph, DiGraph, MultiGraph, MultiDiGraph) are supported
+            - DiGraph edges include 'directed': True in metadata
+            - MultiGraph edges include 'edge_key' in metadata
+            - Multiple edges are expanded to independent Edge objects
+            - NaN/inf positions trigger automatic fallback to random layout
         """
         # Validate input is a NetworkX graph
         if not hasattr(graph, 'nodes') or not hasattr(graph, 'edges'):

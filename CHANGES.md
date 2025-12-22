@@ -1,5 +1,66 @@
 # Changelog
 
+## 0.5.0 (2025-12-22)
+
+**Major Feature Release: NetworkX Plotter API** (terapyon)
+
+### New Features
+
+- **High-level Plotter API**: Direct NetworkX graph visualization without manual JSON conversion
+  - `Plotter.add_networkx()` method for seamless graph rendering in JupyterLab
+  - Support for all 4 NetworkX graph types: Graph, DiGraph, MultiGraph, MultiDiGraph
+  - Automatic node/edge extraction with attribute preservation
+
+- **Custom Styling Support**:
+  - Node color mapping via attribute names or callable functions
+  - Node label mapping with flexible attribute selection
+  - Edge label mapping for relationship visualization
+  - Automatic color scale detection (continuous vs. categorical)
+
+- **Layout Control**:
+  - 5 built-in layout algorithms: spring, kamada_kawai, spectral, circular, random
+  - Custom layout function support
+  - Existing position attribute detection
+  - Automatic fallback with NaN/inf validation
+
+- **Multi-Graph Type Support**:
+  - Edge direction preservation for DiGraph (via metadata)
+  - Edge key preservation for MultiGraph/MultiDiGraph
+  - Multiple edge expansion into independent Edge objects
+  - Automatic graph type detection and dispatch
+
+### API Examples
+
+```python
+from net_vis import Plotter
+import networkx as nx
+
+# Basic visualization
+G = nx.karate_club_graph()
+plotter = Plotter(title="Karate Club Network")
+plotter.add_networkx(G)
+
+# Custom styling
+plotter.add_networkx(G,
+    node_color="club",
+    node_label=lambda d: f"Node {d.get('name', '')}",
+    layout='kamada_kawai'
+)
+```
+
+### Implementation Details
+
+- **NetworkXAdapter**: 650+ lines of conversion logic with comprehensive type hints
+- **Test Coverage**: 60+ test methods covering all public APIs
+- **Python 3.10+ type hints**: Full type annotation support
+- **Comprehensive docstrings**: All public methods documented
+
+### Compatibility
+
+- NetworkX: 3.0+
+- JupyterLab: 3.x and 4.x
+- Python: 3.10+
+
 ## 0.4.0 (2025-11-21)
 
 **Major Release: Migration to MIME Renderer Architecture** (terapyon)
