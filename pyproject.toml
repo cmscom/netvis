@@ -36,6 +36,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
+    "networkx>=3.0",
 ]
 
 [project.optional-dependencies]
