@@ -174,3 +174,95 @@ class TestPlotterStyling:
         # Verify edges have labels
         assert len(data["links"]) == 1
         assert data["links"][0]["label"] == "connects"
+
+
+class TestPlotterMultipleGraphTypes:
+    """Tests for Plotter with all NetworkX graph types."""
+
+    def test_plotter_accepts_graph(self):
+        """Test Plotter accepts nx.Graph with same API."""
+        plotter = Plotter()
+        G = nx.Graph()
+        G.add_edge(1, 2)
+
+        layer_id = plotter.add_networkx(G)
+
+        assert layer_id is not None
+        assert len(plotter._scene.layers) == 1
+        bundle = plotter._repr_mimebundle_()
+        assert len(bundle["application/vnd.netvis+json"]["nodes"]) == 2
+
+    def test_plotter_accepts_digraph(self):
+        """Test Plotter accepts nx.DiGraph with same API."""
+        plotter = Plotter()
+        G = nx.DiGraph()
+        G.add_edge(1, 2)
+
+        layer_id = plotter.add_networkx(G)
+
+        assert layer_id is not None
+        assert len(plotter._scene.layers) == 1
+        bundle = plotter._repr_mimebundle_()
+        data = bundle["application/vnd.netvis+json"]
+        assert len(data["nodes"]) == 2
+        # Verify directed edges are marked
+        assert len(data["links"]) == 1
+
+    def test_plotter_accepts_multigraph(self):
+        """Test Plotter accepts nx.MultiGraph with same API."""
+        plotter = Plotter()
+        G = nx.MultiGraph()
+        G.add_edge(1, 2)
+        G.add_edge(1, 2)  # Multiple edges
+
+        layer_id = plotter.add_networkx(G)
+
+        assert layer_id is not None
+        assert len(plotter._scene.layers) == 1
+        bundle = plotter._repr_mimebundle_()
+        data = bundle["application/vnd.netvis+json"]
+        assert len(data["nodes"]) == 2
+        # Should have 2 edges (expanded)
+        assert len(data["links"]) == 2
+
+    def test_plotter_accepts_multidigraph(self):
+        """Test Plotter accepts nx.MultiDiGraph with same API."""
+        plotter = Plotter()
+        G = nx.MultiDiGraph()
+        G.add_edge(1, 2)
+        G.add_edge(1, 2)  # Multiple directed edges
+
+        layer_id = plotter.add_networkx(G)
+
+        assert layer_id is not None
+        assert len(plotter._scene.layers) == 1
+        bundle = plotter._repr_mimebundle_()
+        data = bundle["application/vnd.netvis+json"]
+        assert len(data["nodes"]) == 2
+        # Should have 2 edges (expanded)
+        assert len(data["links"]) == 2
+
+    def test_plotter_accepts_all_graph_types_with_same_api(self):
+        """Test Plotter.add_networkx accepts all 4 graph types with same API."""
+        graph_types = [
+            nx.Graph(),
+            nx.DiGraph(),
+            nx.MultiGraph(),
+            nx.MultiDiGraph(),
+        ]
+
+        for graph in graph_types:
+            plotter = Plotter()
+            graph.add_edge(1, 2)
+
+            # All graph types should work with same API
+            layer_id = plotter.add_networkx(
+                graph,
+                layout='spring',
+                node_color=None,
+                node_label=None,
+                edge_label=None,
+            )
+
+            assert layer_id is not None
+            assert len(plotter._scene.layers) == 1

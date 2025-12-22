@@ -1,5 +1,6 @@
 """NetworkX graph adapter for converting to netvis data structures."""
 
+import warnings
 from typing import Any, Callable
 from net_vis.models import Node, Edge, GraphLayer
 
@@ -89,7 +90,32 @@ class NetworkXAdapter:
         graph: Any,
         edge_label: str | Callable | None = None,
     ) -> list[Edge]:
-        """Extract edges from NetworkX graph for basic Graph type.
+        """Extract edges from NetworkX graph with automatic type dispatch.
+
+        Args:
+            graph: NetworkX graph object
+            edge_label: Attribute name or function for label mapping
+
+        Returns:
+            List of Edge objects with metadata
+        """
+        # Detect graph type and dispatch to appropriate extractor
+        graph_type = NetworkXAdapter._detect_graph_type(graph)
+
+        if graph_type in ('multigraph', 'multidigraph'):
+            return NetworkXAdapter._expand_multigraph_edges(graph, edge_label)
+        elif graph_type == 'digraph':
+            return NetworkXAdapter._extract_edges_digraph(graph, edge_label)
+        else:
+            # Basic Graph type
+            return NetworkXAdapter._extract_edges_simple(graph, edge_label)
+
+    @staticmethod
+    def _extract_edges_simple(
+        graph: Any,
+        edge_label: str | Callable | None = None,
+    ) -> list[Edge]:
+        """Extract edges from NetworkX Graph (undirected, simple).
 
         Args:
             graph: NetworkX graph object
@@ -124,11 +150,227 @@ class NetworkXAdapter:
         return edges
 
     @staticmethod
-    def _compute_layout(graph: Any) -> dict[Any, tuple[float, float]]:
-        """Compute node positions using spring layout by default.
+    def _extract_edges_digraph(
+        graph: Any,
+        edge_label: str | Callable | None = None,
+    ) -> list[Edge]:
+        """Extract edges from NetworkX DiGraph (directed).
+
+        Args:
+            graph: NetworkX DiGraph object
+            edge_label: Attribute name or function for label mapping
+
+        Returns:
+            List of Edge objects with direction preserved in metadata
+        """
+        edges = []
+
+        for source, target in graph.edges():
+            # Convert node IDs to strings
+            source_str = str(source)
+            target_str = str(target)
+
+            # Get edge attributes and preserve them in metadata
+            edge_attrs = dict(graph[source][target]) if graph[source][target] else {}
+
+            # Add direction indicator to metadata for DiGraph
+            edge_attrs['directed'] = True
+
+            # Apply label mapping
+            label = NetworkXAdapter._map_edge_label(edge_attrs, edge_label)
+
+            # Create Edge object
+            edge = Edge(
+                source=source_str,
+                target=target_str,
+                label=label,
+                metadata=edge_attrs
+            )
+
+            edges.append(edge)
+
+        return edges
+
+    @staticmethod
+    def _expand_multigraph_edges(
+        graph: Any,
+        edge_label: str | Callable | None = None,
+    ) -> list[Edge]:
+        """Extract and expand edges from NetworkX MultiGraph/MultiDiGraph.
+
+        Multiple edges between the same pair of nodes are expanded into
+        independent Edge objects, with edge keys preserved in metadata.
+
+        Args:
+            graph: NetworkX MultiGraph or MultiDiGraph object
+            edge_label: Attribute name or function for label mapping
+
+        Returns:
+            List of Edge objects with edge keys preserved in metadata
+        """
+        edges = []
+
+        # Check if this is a directed multigraph
+        graph_type = NetworkXAdapter._detect_graph_type(graph)
+        is_directed = graph_type == 'multidigraph'
+
+        # MultiGraph.edges() returns (source, target, key) tuples
+        for source, target, key in graph.edges(keys=True):
+            # Convert node IDs to strings
+            source_str = str(source)
+            target_str = str(target)
+
+            # Get edge attributes for this specific edge key
+            edge_attrs = dict(graph[source][target][key]) if graph[source][target][key] else {}
+
+            # Preserve edge key in metadata
+            edge_attrs['edge_key'] = key
+
+            # Add direction indicator for MultiDiGraph
+            if is_directed:
+                edge_attrs['directed'] = True
+
+            # Apply label mapping
+            label = NetworkXAdapter._map_edge_label(edge_attrs, edge_label)
+
+            # Create Edge object
+            edge = Edge(
+                source=source_str,
+                target=target_str,
+                label=label,
+                metadata=edge_attrs
+            )
+
+            edges.append(edge)
+
+        return edges
+
+    @staticmethod
+    def _get_existing_positions(graph: Any) -> dict[Any, tuple[float, float]] | None:
+        """Extract existing 'pos' attribute from nodes.
 
         Args:
             graph: NetworkX graph object
+
+        Returns:
+            Dictionary mapping node IDs to (x, y) positions, or None if not available
+        """
+        positions = {}
+        has_positions = False
+
+        for node_id in graph.nodes():
+            node_data = graph.nodes[node_id]
+            if 'pos' in node_data:
+                positions[node_id] = node_data['pos']
+                has_positions = True
+
+        return positions if has_positions else None
+
+    @staticmethod
+    def _apply_spring_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+        """Apply spring (force-directed) layout.
+
+        Args:
+            graph: NetworkX graph object
+
+        Returns:
+            Dictionary mapping node IDs to (x, y) positions
+        """
+        import networkx as nx
+        return nx.spring_layout(graph)
+
+    @staticmethod
+    def _apply_kamada_kawai_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+        """Apply Kamada-Kawai layout.
+
+        Args:
+            graph: NetworkX graph object
+
+        Returns:
+            Dictionary mapping node IDs to (x, y) positions
+        """
+        import networkx as nx
+        return nx.kamada_kawai_layout(graph)
+
+    @staticmethod
+    def _apply_spectral_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+        """Apply spectral layout.
+
+        Args:
+            graph: NetworkX graph object
+
+        Returns:
+            Dictionary mapping node IDs to (x, y) positions
+        """
+        import networkx as nx
+        return nx.spectral_layout(graph)
+
+    @staticmethod
+    def _apply_circular_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+        """Apply circular layout.
+
+        Args:
+            graph: NetworkX graph object
+
+        Returns:
+            Dictionary mapping node IDs to (x, y) positions
+        """
+        import networkx as nx
+        return nx.circular_layout(graph)
+
+    @staticmethod
+    def _apply_random_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+        """Apply random layout.
+
+        Args:
+            graph: NetworkX graph object
+
+        Returns:
+            Dictionary mapping node IDs to (x, y) positions
+        """
+        import networkx as nx
+        return nx.random_layout(graph)
+
+    @staticmethod
+    def _apply_custom_layout(graph: Any, layout_func: Callable) -> dict[Any, tuple[float, float]]:
+        """Apply custom layout function.
+
+        Args:
+            graph: NetworkX graph object
+            layout_func: Custom function that takes graph and returns position dict
+
+        Returns:
+            Dictionary mapping node IDs to (x, y) positions
+        """
+        return layout_func(graph)
+
+    @staticmethod
+    def _validate_positions(positions: dict[Any, tuple[float, float]]) -> bool:
+        """Validate that positions don't contain NaN or inf values.
+
+        Args:
+            positions: Dictionary mapping node IDs to (x, y) positions
+
+        Returns:
+            True if valid, False otherwise
+        """
+        import math
+
+        for node_id, (x, y) in positions.items():
+            if math.isnan(x) or math.isnan(y) or math.isinf(x) or math.isinf(y):
+                return False
+        return True
+
+    @staticmethod
+    def _compute_layout(
+        graph: Any,
+        layout: str | Callable | None = None
+    ) -> dict[Any, tuple[float, float]]:
+        """Compute node positions using specified layout algorithm.
+
+        Args:
+            graph: NetworkX graph object
+            layout: Layout algorithm name, custom function, or None
 
         Returns:
             Dictionary mapping node IDs to (x, y) positions
@@ -146,17 +388,57 @@ class NetworkXAdapter:
         if len(graph.nodes()) == 0:
             return {}
 
-        # Use spring layout as default
-        try:
-            positions = nx.spring_layout(graph)
-            return positions
-        except Exception as e:
-            # If spring layout fails, raise ValueError
-            raise ValueError(f"Layout computation failed: {e}") from e
+        # Determine which layout to use
+        positions = None
+
+        if layout is None:
+            # Try to use existing 'pos' attribute, fall back to spring
+            positions = NetworkXAdapter._get_existing_positions(graph)
+            if positions is None:
+                try:
+                    positions = NetworkXAdapter._apply_spring_layout(graph)
+                except Exception as e:
+                    warnings.warn(f"Spring layout failed: {e}, falling back to random layout")
+                    positions = NetworkXAdapter._apply_random_layout(graph)
+        elif callable(layout):
+            # Custom layout function
+            try:
+                positions = NetworkXAdapter._apply_custom_layout(graph, layout)
+            except Exception as e:
+                warnings.warn(f"Custom layout failed: {e}, falling back to random layout")
+                positions = NetworkXAdapter._apply_random_layout(graph)
+        else:
+            # Named layout algorithm
+            layout_str = str(layout).lower()
+            try:
+                if layout_str == 'spring':
+                    positions = NetworkXAdapter._apply_spring_layout(graph)
+                elif layout_str == 'kamada_kawai':
+                    positions = NetworkXAdapter._apply_kamada_kawai_layout(graph)
+                elif layout_str == 'spectral':
+                    positions = NetworkXAdapter._apply_spectral_layout(graph)
+                elif layout_str == 'circular':
+                    positions = NetworkXAdapter._apply_circular_layout(graph)
+                elif layout_str == 'random':
+                    positions = NetworkXAdapter._apply_random_layout(graph)
+                else:
+                    warnings.warn(f"Unknown layout '{layout}', using spring layout")
+                    positions = NetworkXAdapter._apply_spring_layout(graph)
+            except Exception as e:
+                warnings.warn(f"Layout '{layout}' failed: {e}, falling back to random layout")
+                positions = NetworkXAdapter._apply_random_layout(graph)
+
+        # Validate positions
+        if not NetworkXAdapter._validate_positions(positions):
+            warnings.warn("Layout produced invalid positions (NaN/inf), falling back to random layout")
+            positions = NetworkXAdapter._apply_random_layout(graph)
+
+        return positions
 
     @staticmethod
     def convert_graph(
         graph: Any,
+        layout: str | Callable | None = None,
         node_color: str | Callable | None = None,
         node_label: str | Callable | None = None,
         edge_label: str | Callable | None = None,
@@ -165,6 +447,7 @@ class NetworkXAdapter:
 
         Args:
             graph: NetworkX graph object
+            layout: Layout algorithm name, custom function, or None
             node_color: Attribute name or function for node color mapping
             node_label: Attribute name or function for node label mapping
             edge_label: Attribute name or function for edge label mapping
@@ -179,7 +462,7 @@ class NetworkXAdapter:
         graph_type = NetworkXAdapter._detect_graph_type(graph)
 
         # Compute layout positions
-        positions = NetworkXAdapter._compute_layout(graph)
+        positions = NetworkXAdapter._compute_layout(graph, layout=layout)
 
         # Extract nodes with positions and styling
         nodes = NetworkXAdapter._extract_nodes(

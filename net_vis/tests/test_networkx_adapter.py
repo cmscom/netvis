@@ -240,3 +240,308 @@ class TestNetworkXAdapterStyling:
 
         node2 = next(n for n in layer.nodes if n.id == "2")
         assert node2.color == "red"
+
+
+class TestNetworkXAdapterLayouts:
+    """Tests for layout algorithms."""
+
+    def test_layout_spring_applies_spring_layout(self):
+        """Test layout='spring' applies spring_layout."""
+        G = nx.Graph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G, layout='spring')
+
+        # Verify all nodes have positions
+        assert len(layer.nodes) == 3
+        for node in layer.nodes:
+            assert isinstance(node.x, float)
+            assert isinstance(node.y, float)
+
+    def test_layout_kamada_kawai_applies_kamada_kawai_layout(self):
+        """Test layout='kamada_kawai' applies kamada_kawai_layout."""
+        G = nx.Graph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G, layout='kamada_kawai')
+
+        # Verify all nodes have positions
+        assert len(layer.nodes) == 3
+        for node in layer.nodes:
+            assert isinstance(node.x, float)
+            assert isinstance(node.y, float)
+
+    def test_layout_spectral_applies_spectral_layout(self):
+        """Test layout='spectral' applies spectral_layout."""
+        G = nx.Graph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G, layout='spectral')
+
+        # Verify all nodes have positions
+        assert len(layer.nodes) == 3
+        for node in layer.nodes:
+            assert isinstance(node.x, float)
+            assert isinstance(node.y, float)
+
+    def test_layout_circular_applies_circular_layout(self):
+        """Test layout='circular' applies circular_layout."""
+        G = nx.Graph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G, layout='circular')
+
+        # Verify all nodes have positions
+        assert len(layer.nodes) == 3
+        for node in layer.nodes:
+            assert isinstance(node.x, float)
+            assert isinstance(node.y, float)
+
+    def test_layout_random_applies_random_layout(self):
+        """Test layout='random' applies random_layout."""
+        G = nx.Graph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G, layout='random')
+
+        # Verify all nodes have positions
+        assert len(layer.nodes) == 3
+        for node in layer.nodes:
+            assert isinstance(node.x, float)
+            assert isinstance(node.y, float)
+
+    def test_layout_with_custom_callable_function(self):
+        """Test layout with custom callable function."""
+        G = nx.Graph()
+        G.add_node(1)
+        G.add_node(2)
+        G.add_edge(1, 2)
+
+        def custom_layout(graph):
+            """Custom layout placing nodes at specific positions."""
+            return {1: (0.0, 0.0), 2: (1.0, 1.0)}
+
+        layer = NetworkXAdapter.convert_graph(G, layout=custom_layout)
+
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert node1.x == 0.0
+        assert node1.y == 0.0
+
+        node2 = next(n for n in layer.nodes if n.id == "2")
+        assert node2.x == 1.0
+        assert node2.y == 1.0
+
+    def test_layout_none_uses_existing_pos_attribute(self):
+        """Test layout=None uses existing 'pos' attribute if present."""
+        G = nx.Graph()
+        G.add_node(1, pos=(0.5, 0.5))
+        G.add_node(2, pos=(0.7, 0.3))
+        G.add_edge(1, 2)
+
+        layer = NetworkXAdapter.convert_graph(G, layout=None)
+
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert node1.x == 0.5
+        assert node1.y == 0.5
+
+        node2 = next(n for n in layer.nodes if n.id == "2")
+        assert node2.x == 0.7
+        assert node2.y == 0.3
+
+    def test_layout_none_defaults_to_spring_when_no_pos(self):
+        """Test layout=None defaults to spring when no 'pos' attribute."""
+        G = nx.Graph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G, layout=None)
+
+        # Verify all nodes have positions (spring layout applied)
+        assert len(layer.nodes) == 3
+        for node in layer.nodes:
+            assert isinstance(node.x, float)
+            assert isinstance(node.y, float)
+
+    def test_explicit_layout_overrides_existing_pos(self):
+        """Test explicit layout overrides existing 'pos' attribute."""
+        G = nx.Graph()
+        G.add_node(1, pos=(0.5, 0.5))
+        G.add_node(2, pos=(0.7, 0.3))
+        G.add_edge(1, 2)
+
+        layer = NetworkXAdapter.convert_graph(G, layout='circular')
+
+        # Positions should be different from original pos attribute
+        # (we can't predict exact values, but they should be valid floats)
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert isinstance(node1.x, float)
+        assert isinstance(node1.y, float)
+
+    def test_layout_failure_falls_back_to_random_with_warning(self):
+        """Test layout failure (NaN, inf) falls back to random with warning."""
+        import warnings
+
+        G = nx.Graph()
+        G.add_edge(1, 2)
+
+        def failing_layout(graph):
+            """Layout that returns NaN values."""
+            return {1: (float('nan'), 0.0), 2: (1.0, 1.0)}
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            layer = NetworkXAdapter.convert_graph(G, layout=failing_layout)
+
+            # Should have warned about invalid positions
+            assert len(w) > 0
+            assert "invalid positions" in str(w[-1].message).lower()
+
+        # Should still have valid positions (from fallback)
+        for node in layer.nodes:
+            assert isinstance(node.x, float)
+            assert isinstance(node.y, float)
+            import math
+            assert not math.isnan(node.x)
+            assert not math.isnan(node.y)
+
+
+class TestNetworkXAdapterMultipleGraphTypes:
+    """Tests for all NetworkX graph types support."""
+
+    def test_convert_graph_with_undirected_graph(self):
+        """Test NetworkXAdapter with nx.Graph (undirected)."""
+        G = nx.Graph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G)
+
+        assert layer is not None
+        assert len(layer.nodes) == 3
+        assert len(layer.edges) == 2
+        assert layer.metadata["graph_type"] == "graph"
+
+        # Verify edges don't have 'directed' flag
+        for edge in layer.edges:
+            assert 'directed' not in edge.metadata or not edge.metadata['directed']
+
+    def test_convert_graph_with_digraph(self):
+        """Test NetworkXAdapter with nx.DiGraph (directed)."""
+        G = nx.DiGraph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 3)
+
+        layer = NetworkXAdapter.convert_graph(G)
+
+        assert layer is not None
+        assert len(layer.nodes) == 3
+        assert len(layer.edges) == 2
+        assert layer.metadata["graph_type"] == "digraph"
+
+        # Verify all edges have 'directed' flag set to True
+        for edge in layer.edges:
+            assert edge.metadata['directed'] is True
+
+    def test_convert_graph_with_multigraph(self):
+        """Test NetworkXAdapter with nx.MultiGraph (multi-undirected)."""
+        G = nx.MultiGraph()
+        G.add_edge(1, 2, weight=1.0)
+        G.add_edge(1, 2, weight=2.0)  # Second edge between same nodes
+        G.add_edge(2, 3, weight=3.0)
+
+        layer = NetworkXAdapter.convert_graph(G)
+
+        assert layer is not None
+        assert len(layer.nodes) == 3
+        # Should have 3 edges (2 between nodes 1-2, 1 between nodes 2-3)
+        assert len(layer.edges) == 3
+        assert layer.metadata["graph_type"] == "multigraph"
+
+        # Verify edge keys are preserved
+        for edge in layer.edges:
+            assert 'edge_key' in edge.metadata
+
+    def test_convert_graph_with_multidigraph(self):
+        """Test NetworkXAdapter with nx.MultiDiGraph (multi-directed)."""
+        G = nx.MultiDiGraph()
+        G.add_edge(1, 2, relation="friend")
+        G.add_edge(1, 2, relation="colleague")  # Second edge between same nodes
+        G.add_edge(2, 3, relation="manager")
+
+        layer = NetworkXAdapter.convert_graph(G)
+
+        assert layer is not None
+        assert len(layer.nodes) == 3
+        # Should have 3 edges
+        assert len(layer.edges) == 3
+        assert layer.metadata["graph_type"] == "multidigraph"
+
+        # Verify both edge keys and direction are preserved
+        for edge in layer.edges:
+            assert 'edge_key' in edge.metadata
+            assert edge.metadata['directed'] is True
+
+    def test_digraph_edge_direction_preserved(self):
+        """Test DiGraph edge direction preserved in output."""
+        G = nx.DiGraph()
+        G.add_edge(1, 2)
+        G.add_edge(2, 1)  # Opposite direction
+
+        layer = NetworkXAdapter.convert_graph(G)
+
+        # Should have 2 edges (one in each direction)
+        assert len(layer.edges) == 2
+
+        # Find edges by source/target
+        edge_1_to_2 = next(e for e in layer.edges if e.source == "1" and e.target == "2")
+        edge_2_to_1 = next(e for e in layer.edges if e.source == "2" and e.target == "1")
+
+        # Both should be marked as directed
+        assert edge_1_to_2.metadata['directed'] is True
+        assert edge_2_to_1.metadata['directed'] is True
+
+    def test_multigraph_edge_keys_preserved(self):
+        """Test MultiGraph edge keys preserved in edge metadata."""
+        G = nx.MultiGraph()
+        # Add multiple edges with custom keys
+        G.add_edge(1, 2, key='first', weight=1.0)
+        G.add_edge(1, 2, key='second', weight=2.0)
+        G.add_edge(1, 2, key='third', weight=3.0)
+
+        layer = NetworkXAdapter.convert_graph(G)
+
+        # Should have 3 edges
+        assert len(layer.edges) == 3
+
+        # Verify all edges have edge_key preserved
+        edge_keys = [edge.metadata['edge_key'] for edge in layer.edges]
+        # NetworkX may use integer keys by default, but our custom keys should be preserved
+        assert len(edge_keys) == 3
+        assert all('edge_key' in edge.metadata for edge in layer.edges)
+
+    def test_multigraph_expands_multiple_edges(self):
+        """Test MultiGraph expands multiple edges to independent Edge objects."""
+        G = nx.MultiGraph()
+        # Add 3 edges between nodes 1 and 2
+        G.add_edge(1, 2, label="edge_a")
+        G.add_edge(1, 2, label="edge_b")
+        G.add_edge(1, 2, label="edge_c")
+
+        layer = NetworkXAdapter.convert_graph(G)
+
+        # Should create 3 independent Edge objects
+        assert len(layer.edges) == 3
+
+        # All edges should be between nodes "1" and "2"
+        for edge in layer.edges:
+            assert (edge.source == "1" and edge.target == "2") or \
+                   (edge.source == "2" and edge.target == "1")
+
+        # Each edge should have unique edge_key
+        edge_keys = [edge.metadata['edge_key'] for edge in layer.edges]
+        assert len(set(edge_keys)) == 3  # All keys should be unique
