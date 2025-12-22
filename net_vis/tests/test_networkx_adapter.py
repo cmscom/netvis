@@ -118,3 +118,125 @@ class TestNetworkXAdapterGraphTypes:
         G = nx.MultiDiGraph()
         graph_type = NetworkXAdapter._detect_graph_type(G)
         assert graph_type == "multidigraph"
+
+
+class TestNetworkXAdapterStyling:
+    """Tests for node and edge styling."""
+
+    def test_node_color_with_attribute_name(self):
+        """Test node_color with attribute name (string)."""
+        G = nx.Graph()
+        G.add_node(1, color="red")
+        G.add_node(2, color="blue")
+        G.add_edge(1, 2)
+
+        layer = NetworkXAdapter.convert_graph(G, node_color="color")
+
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert node1.color == "red"
+
+        node2 = next(n for n in layer.nodes if n.id == "2")
+        assert node2.color == "blue"
+
+    def test_node_color_with_callable_function(self):
+        """Test node_color with callable function."""
+        G = nx.Graph()
+        G.add_node(1, value=10)
+        G.add_node(2, value=20)
+        G.add_edge(1, 2)
+
+        def color_fn(node_data):
+            return f"value_{node_data.get('value', 0)}"
+
+        layer = NetworkXAdapter.convert_graph(G, node_color=color_fn)
+
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert node1.color == "value_10"
+
+        node2 = next(n for n in layer.nodes if n.id == "2")
+        assert node2.color == "value_20"
+
+    def test_node_label_with_attribute_name(self):
+        """Test node_label with attribute name (string)."""
+        G = nx.Graph()
+        G.add_node(1, name="Alice")
+        G.add_node(2, name="Bob")
+        G.add_edge(1, 2)
+
+        layer = NetworkXAdapter.convert_graph(G, node_label="name")
+
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert node1.label == "Alice"
+
+        node2 = next(n for n in layer.nodes if n.id == "2")
+        assert node2.label == "Bob"
+
+    def test_node_label_with_callable_function(self):
+        """Test node_label with callable function."""
+        G = nx.Graph()
+        G.add_node(1, value=10)
+        G.add_node(2, value=20)
+        G.add_edge(1, 2)
+
+        def label_fn(node_data):
+            return f"Node {node_data.get('value', 0)}"
+
+        layer = NetworkXAdapter.convert_graph(G, node_label=label_fn)
+
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert node1.label == "Node 10"
+
+    def test_edge_label_with_attribute_name(self):
+        """Test edge_label with attribute name (string)."""
+        G = nx.Graph()
+        G.add_edge(1, 2, relation="friend")
+        G.add_edge(2, 3, relation="colleague")
+
+        layer = NetworkXAdapter.convert_graph(G, edge_label="relation")
+
+        edge1 = next(e for e in layer.edges if e.source == "1" and e.target == "2")
+        assert edge1.label == "friend"
+
+        edge2 = next(e for e in layer.edges if e.source == "2" and e.target == "3")
+        assert edge2.label == "colleague"
+
+    def test_edge_label_with_callable_function(self):
+        """Test edge_label with callable function."""
+        G = nx.Graph()
+        G.add_edge(1, 2, weight=5.0)
+        G.add_edge(2, 3, weight=3.0)
+
+        def label_fn(edge_data):
+            return f"w={edge_data.get('weight', 0)}"
+
+        layer = NetworkXAdapter.convert_graph(G, edge_label=label_fn)
+
+        edge1 = next(e for e in layer.edges if e.source == "1" and e.target == "2")
+        assert edge1.label == "w=5.0"
+
+    def test_numeric_color_values_trigger_continuous_scale(self):
+        """Test numeric color values trigger continuous scale."""
+        values = [1.0, 2.0, 3.0, 4.0]
+        color_type = NetworkXAdapter._detect_color_type(values)
+        assert color_type == "numeric"
+
+    def test_string_color_values_trigger_categorical_palette(self):
+        """Test string color values trigger categorical palette."""
+        values = ["red", "blue", "green"]
+        color_type = NetworkXAdapter._detect_color_type(values)
+        assert color_type == "categorical"
+
+    def test_missing_attribute_uses_default_none(self):
+        """Test missing attribute uses default (None) without error."""
+        G = nx.Graph()
+        G.add_node(1)  # No color attribute
+        G.add_node(2, color="red")
+        G.add_edge(1, 2)
+
+        layer = NetworkXAdapter.convert_graph(G, node_color="color")
+
+        node1 = next(n for n in layer.nodes if n.id == "1")
+        assert node1.color is None  # Missing attribute
+
+        node2 = next(n for n in layer.nodes if n.id == "2")
+        assert node2.color == "red"

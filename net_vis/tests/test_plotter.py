@@ -141,3 +141,36 @@ class TestPlotterIntegration:
         data = json.loads(json_str)
         assert "nodes" in data
         assert "links" in data
+
+
+class TestPlotterStyling:
+    """Tests for Plotter styling parameters."""
+
+    def test_add_networkx_with_all_styling_parameters(self):
+        """Test Plotter.add_networkx with all styling parameters."""
+        plotter = Plotter()
+        G = nx.Graph()
+        G.add_node(1, color="red", name="Node A")
+        G.add_node(2, color="blue", name="Node B")
+        G.add_edge(1, 2, relation="connects")
+
+        layer_id = plotter.add_networkx(
+            G,
+            node_color="color",
+            node_label="name",
+            edge_label="relation",
+        )
+
+        assert layer_id == "layer_0"
+        bundle = plotter._repr_mimebundle_()
+        data = bundle["application/vnd.netvis+json"]
+
+        # Verify nodes have colors and labels
+        assert len(data["nodes"]) == 2
+        node1 = next(n for n in data["nodes"] if n["id"] == "1")
+        assert node1["category"] == "red"
+        assert node1["name"] == "Node A"
+
+        # Verify edges have labels
+        assert len(data["links"]) == 1
+        assert data["links"][0]["label"] == "connects"

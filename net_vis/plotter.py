@@ -1,7 +1,7 @@
 """High-level API for plotting NetworkX graphs in JupyterLab."""
 
 import json
-from typing import Any
+from typing import Any, Callable
 from net_vis.models import Scene, GraphLayer
 from net_vis.adapters.networkx import NetworkXAdapter
 
@@ -37,12 +37,18 @@ class Plotter:
         graph: Any,
         *,
         layer_id: str | None = None,
+        node_color: str | Callable | None = None,
+        node_label: str | Callable | None = None,
+        edge_label: str | Callable | None = None,
     ) -> str:
         """Add NetworkX graph as visualization layer.
 
         Args:
             graph: NetworkX graph object (Graph/DiGraph/MultiGraph/MultiDiGraph)
             layer_id: Custom layer ID (auto-generated if None)
+            node_color: Attribute name (str) or function (node_data -> color_value)
+            node_label: Attribute name (str) or function (node_data -> label_str)
+            edge_label: Attribute name (str) or function (edge_data -> label_str)
 
         Returns:
             layer_id: ID of the added layer
@@ -62,7 +68,12 @@ class Plotter:
             layer_id = self._generate_layer_id()
 
         # Convert NetworkX graph to GraphLayer using adapter
-        graph_layer = NetworkXAdapter.convert_graph(graph)
+        graph_layer = NetworkXAdapter.convert_graph(
+            graph,
+            node_color=node_color,
+            node_label=node_label,
+            edge_label=edge_label,
+        )
         graph_layer.layer_id = layer_id
 
         # Add layer to scene
