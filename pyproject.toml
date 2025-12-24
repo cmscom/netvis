@@ -41,6 +41,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+full = [
+    "scipy>=1.8",  # Required for kamada_kawai and spectral layouts
+]
 docs = [
     "jupyter_sphinx",
     "nbsphinx",
@@ -58,6 +61,7 @@ test = [
     "pytest>=6.0",
     "ruff>=0.8.0",
     "pyright>=1.1.0",
+    "scipy>=1.8",  # Include full dependencies for comprehensive testing
 ]
 
 [project.urls]

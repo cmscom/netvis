@@ -55,10 +55,22 @@ plotter.add_networkx(G,
 - **Python 3.10+ type hints**: Full type annotation support
 - **Comprehensive docstrings**: All public methods documented
 
+### Installation Options
+
+- **Basic**: `pip install net_vis` - Includes spring, circular, and random layouts
+- **Full**: `pip install net_vis[full]` - Includes all layouts (adds SciPy for kamada_kawai and spectral)
+
+### Dependencies
+
+**Core:**
+- NetworkX 3.0+
+- NumPy 2.0+ (required for layout algorithms)
+
+**Optional (installed with [full]):**
+- SciPy 1.8+ (required for kamada_kawai and spectral layouts)
+
 ### Compatibility
 
-- NetworkX: 3.0+
-- NumPy: 2.0+ (required by NetworkX layout algorithms)
 - JupyterLab: 3.x and 4.x
 - Python: 3.10+
 

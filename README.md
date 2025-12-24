@@ -6,11 +6,25 @@ NetVis is a package for interactive visualization of Python NetworkX graphs with
 
 ## Installation
 
+### Basic Installation
+
 You can install using `pip`:
 
 ```bash
 pip install net_vis
 ```
+
+This provides core functionality with layouts: **spring**, **circular**, and **random**.
+
+### Full Installation (Recommended)
+
+For all layout algorithms including **kamada_kawai** and **spectral**:
+
+```bash
+pip install net_vis[full]
+```
+
+This installs optional dependencies (scipy) required for advanced layout algorithms.
 
 **Note**: NetVis uses a MIME renderer that works automatically in JupyterLab 3.x and 4.x environments. No manual extension enabling is required.
 

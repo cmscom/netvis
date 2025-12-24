@@ -288,7 +288,18 @@ class NetworkXAdapter:
 
         Returns:
             Dictionary mapping node IDs to (x, y) positions
+
+        Raises:
+            ImportError: If scipy is not installed
         """
+        try:
+            import scipy
+        except ImportError:
+            raise ImportError(
+                "Layout 'kamada_kawai' requires scipy. "
+                "Install with: pip install net_vis[full]"
+            )
+
         import networkx as nx
         return nx.kamada_kawai_layout(graph)
 
@@ -301,7 +312,18 @@ class NetworkXAdapter:
 
         Returns:
             Dictionary mapping node IDs to (x, y) positions
+
+        Raises:
+            ImportError: If scipy is not installed
         """
+        try:
+            import scipy
+        except ImportError:
+            raise ImportError(
+                "Layout 'spectral' requires scipy. "
+                "Install with: pip install net_vis[full]"
+            )
+
         import networkx as nx
         return nx.spectral_layout(graph)
 
