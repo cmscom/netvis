@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0 (2025-12-22)
+## 0.5.0 (2025-12-24)
 
 **Major Feature Release: NetworkX Plotter API** (terapyon)
 
@@ -63,10 +63,12 @@ plotter.add_networkx(G,
 ### Dependencies
 
 **Core:**
+
 - NetworkX 3.0+
 - NumPy 2.0+ (required for layout algorithms)
 
 **Optional (installed with [full]):**
+
 - SciPy 1.8+ (required for kamada_kawai and spectral layouts)
 
 ### Compatibility

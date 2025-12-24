@@ -1,11 +1,12 @@
 """NetworkX graph adapter for converting to netvis data structures."""
 
 import warnings
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import networkx as nx
 
-from ..models import Node, Edge, GraphLayer
+from ..models import Edge, GraphLayer, Node
 
 
 class NetworkXAdapter:
