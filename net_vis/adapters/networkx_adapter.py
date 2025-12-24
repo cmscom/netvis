@@ -42,7 +42,7 @@ class NetworkXAdapter:
     @staticmethod
     def _extract_nodes(
         graph: Any,
-        positions: dict[Any, tuple[float, float]],
+        positions: dict[Any, Any],
         node_color: str | Callable | None = None,
         node_label: str | Callable | None = None,
     ) -> list[Node]:
@@ -250,7 +250,7 @@ class NetworkXAdapter:
         return edges
 
     @staticmethod
-    def _get_existing_positions(graph: Any) -> dict[Any, tuple[float, float]] | None:
+    def _get_existing_positions(graph: Any) -> dict[Any, Any] | None:
         """Extract existing 'pos' attribute from nodes.
 
         Args:
@@ -271,7 +271,7 @@ class NetworkXAdapter:
         return positions if has_positions else None
 
     @staticmethod
-    def _apply_spring_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+    def _apply_spring_layout(graph: Any) -> dict[Any, Any]:
         """Apply spring (force-directed) layout.
 
         Args:
@@ -283,7 +283,7 @@ class NetworkXAdapter:
         return nx.spring_layout(graph)
 
     @staticmethod
-    def _apply_kamada_kawai_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+    def _apply_kamada_kawai_layout(graph: Any) -> dict[Any, Any]:
         """Apply Kamada-Kawai layout.
 
         Args:
@@ -296,7 +296,7 @@ class NetworkXAdapter:
             ImportError: If scipy is not installed
         """
         try:
-            import scipy  # noqa: F401
+            import scipy  # type: ignore[import-not-found]  # noqa: F401
         except ImportError:
             raise ImportError(
                 "Layout 'kamada_kawai' requires scipy. "
@@ -306,7 +306,7 @@ class NetworkXAdapter:
         return nx.kamada_kawai_layout(graph)
 
     @staticmethod
-    def _apply_spectral_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+    def _apply_spectral_layout(graph: Any) -> dict[Any, Any]:
         """Apply spectral layout.
 
         Args:
@@ -319,7 +319,7 @@ class NetworkXAdapter:
             ImportError: If scipy is not installed
         """
         try:
-            import scipy  # noqa: F401
+            import scipy  # type: ignore[import-not-found]  # noqa: F401
         except ImportError:
             raise ImportError(
                 "Layout 'spectral' requires scipy. "
@@ -329,7 +329,7 @@ class NetworkXAdapter:
         return nx.spectral_layout(graph)
 
     @staticmethod
-    def _apply_circular_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+    def _apply_circular_layout(graph: Any) -> dict[Any, Any]:
         """Apply circular layout.
 
         Args:
@@ -341,7 +341,7 @@ class NetworkXAdapter:
         return nx.circular_layout(graph)
 
     @staticmethod
-    def _apply_random_layout(graph: Any) -> dict[Any, tuple[float, float]]:
+    def _apply_random_layout(graph: Any) -> dict[Any, Any]:
         """Apply random layout.
 
         Args:
@@ -353,7 +353,7 @@ class NetworkXAdapter:
         return nx.random_layout(graph)
 
     @staticmethod
-    def _apply_custom_layout(graph: Any, layout_func: Callable) -> dict[Any, tuple[float, float]]:
+    def _apply_custom_layout(graph: Any, layout_func: Callable) -> dict[Any, Any]:
         """Apply custom layout function.
 
         Args:
@@ -366,7 +366,7 @@ class NetworkXAdapter:
         return layout_func(graph)
 
     @staticmethod
-    def _validate_positions(positions: dict[Any, tuple[float, float]]) -> bool:
+    def _validate_positions(positions: dict[Any, Any]) -> bool:
         """Validate that positions don't contain NaN or inf values.
 
         Args:
@@ -386,7 +386,7 @@ class NetworkXAdapter:
     def _compute_layout(
         graph: Any,
         layout: str | Callable | None = None
-    ) -> dict[Any, tuple[float, float]]:
+    ) -> dict[Any, Any]:
         """Compute node positions using specified layout algorithm.
 
         Args:

@@ -1,12 +1,14 @@
 """Tests for Plotter class public API."""
 
 import json
+
 import pytest
 
 # Skip all tests if networkx is not installed
 pytest.importorskip("networkx")
 
 import networkx as nx
+
 from net_vis import Plotter
 
 

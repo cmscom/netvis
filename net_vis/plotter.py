@@ -1,9 +1,11 @@
 """High-level API for plotting NetworkX graphs in JupyterLab."""
 
 import json
-from typing import Any, Callable
-from .models import Scene, GraphLayer
+from collections.abc import Callable
+from typing import Any
+
 from .adapters.networkx_adapter import NetworkXAdapter
+from .models import Scene
 
 
 class Plotter:

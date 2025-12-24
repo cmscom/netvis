@@ -92,7 +92,7 @@ class Scene:
         for layer in self.layers:
             # Convert nodes to netvis format
             for node in layer.nodes:
-                node_dict = {
+                node_dict: dict[str, Any] = {
                     "id": node.id,
                     "x": node.x,
                     "y": node.y,
@@ -107,7 +107,7 @@ class Scene:
 
             # Convert edges to netvis format (links)
             for edge in layer.edges:
-                link_dict = {
+                link_dict: dict[str, Any] = {
                     "source": edge.source,
                     "target": edge.target,
                 }
@@ -119,7 +119,7 @@ class Scene:
                 link_dict.update(edge.metadata)
                 all_links.append(link_dict)
 
-        result = {
+        result: dict[str, Any] = {
             "nodes": all_nodes,
             "links": all_links,
         }

@@ -134,6 +134,7 @@ exclude = [
     ".venv",
     "venv",
     "venv-docker",
+    "net_vis/tests",
 ]
 pythonVersion = "3.10"
 typeCheckingMode = "basic"

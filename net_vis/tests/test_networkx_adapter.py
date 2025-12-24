@@ -6,6 +6,7 @@ import pytest
 pytest.importorskip("networkx")
 
 import networkx as nx
+
 from net_vis.adapters.networkx_adapter import NetworkXAdapter
 
 
