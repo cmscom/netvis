@@ -2,7 +2,10 @@
 
 import warnings
 from typing import Any, Callable
-from net_vis.models import Node, Edge, GraphLayer
+
+import networkx as nx
+
+from ..models import Node, Edge, GraphLayer
 
 
 class NetworkXAdapter:
@@ -276,7 +279,6 @@ class NetworkXAdapter:
         Returns:
             Dictionary mapping node IDs to (x, y) positions
         """
-        import networkx as nx
         return nx.spring_layout(graph)
 
     @staticmethod
@@ -293,14 +295,13 @@ class NetworkXAdapter:
             ImportError: If scipy is not installed
         """
         try:
-            import scipy
+            import scipy  # noqa: F401
         except ImportError:
             raise ImportError(
                 "Layout 'kamada_kawai' requires scipy. "
                 "Install with: pip install net_vis[full]"
             )
 
-        import networkx as nx
         return nx.kamada_kawai_layout(graph)
 
     @staticmethod
@@ -317,14 +318,13 @@ class NetworkXAdapter:
             ImportError: If scipy is not installed
         """
         try:
-            import scipy
+            import scipy  # noqa: F401
         except ImportError:
             raise ImportError(
                 "Layout 'spectral' requires scipy. "
                 "Install with: pip install net_vis[full]"
             )
 
-        import networkx as nx
         return nx.spectral_layout(graph)
 
     @staticmethod
@@ -337,7 +337,6 @@ class NetworkXAdapter:
         Returns:
             Dictionary mapping node IDs to (x, y) positions
         """
-        import networkx as nx
         return nx.circular_layout(graph)
 
     @staticmethod
@@ -350,7 +349,6 @@ class NetworkXAdapter:
         Returns:
             Dictionary mapping node IDs to (x, y) positions
         """
-        import networkx as nx
         return nx.random_layout(graph)
 
     @staticmethod
@@ -397,15 +395,6 @@ class NetworkXAdapter:
         Returns:
             Dictionary mapping node IDs to (x, y) positions
         """
-        # Import networkx here to avoid import errors if not installed
-        try:
-            import networkx as nx
-        except ImportError:
-            raise ImportError(
-                "NetworkX is required for graph layout computation. "
-                "Install it with: pip install networkx"
-            )
-
         # Handle empty graphs
         if len(graph.nodes()) == 0:
             return {}

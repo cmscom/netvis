@@ -2,8 +2,8 @@
 
 import json
 from typing import Any, Callable
-from net_vis.models import Scene, GraphLayer
-from net_vis.adapters.networkx_adapter import NetworkXAdapter
+from .models import Scene, GraphLayer
+from .adapters.networkx_adapter import NetworkXAdapter
 
 
 class Plotter:
