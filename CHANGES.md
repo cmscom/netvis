@@ -58,6 +58,7 @@ plotter.add_networkx(G,
 ### Compatibility
 
 - NetworkX: 3.0+
+- NumPy: 2.0+ (required by NetworkX layout algorithms)
 - JupyterLab: 3.x and 4.x
 - Python: 3.10+
 

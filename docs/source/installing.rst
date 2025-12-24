@@ -17,6 +17,8 @@ Requirements
 
 - Python 3.10 or later
 - JupyterLab 3.x or 4.x
+- NetworkX 3.0+ (automatically installed)
+- NumPy 2.0+ (automatically installed, required for layout algorithms)
 
 **Note**: Jupyter Notebook Classic is no longer supported as of version 0.4.0. Please use JupyterLab instead.
 
