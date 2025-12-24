@@ -1,5 +1,6 @@
 """Tests for HTML export functionality."""
 
+import sys
 from pathlib import Path
 
 import pytest
@@ -356,6 +357,7 @@ class TestEdgeCases:
         assert elapsed < 30, f"Export took {elapsed:.2f}s, expected < 30s"
         assert filepath.exists()
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="chmod doesn't work the same on Windows")
     def test_permission_error_propagates(self, sample_plotter: Plotter, tmp_path: Path) -> None:
         """T057: Verify permission errors are propagated."""
         import stat
