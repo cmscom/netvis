@@ -1,7 +1,7 @@
 {
   "name": "net_vis",
-  "version": "0.4.0",
-  "description": "NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless.",
+  "version": "0.5.0",
+  "description": "NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and provides a high-level Plotter API for effortless network analysis.",
   "keywords": [
     "jupyter",
     "jupyterlab",

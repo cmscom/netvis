@@ -1,10 +1,12 @@
 # netvis
 
-NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless.
+NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and provides a high-level Plotter API for effortless network analysis.
 
-**Version 0.4.0** introduces a MIME renderer architecture that simplifies installation and improves compatibility with modern JupyterLab environments.
+**Version 0.5.0** introduces the NetworkX Plotter API, enabling direct visualization of NetworkX graph objects without manual JSON conversion.
 
 ## Installation
+
+### Basic Installation
 
 You can install using `pip`:
 
@@ -12,13 +14,64 @@ You can install using `pip`:
 pip install net_vis
 ```
 
-**Note for version 0.4.0+**: The nbextension is no longer required. NetVis now uses a MIME renderer that works automatically in JupyterLab 3.x and 4.x environments.
+This provides core functionality with layouts: **spring**, **circular**, and **random**.
+
+### Full Installation (Recommended)
+
+For all layout algorithms including **kamada_kawai** and **spectral**:
+
+```bash
+pip install net_vis[full]
+```
+
+This installs optional dependencies (scipy) required for advanced layout algorithms.
+
+**Note**: NetVis uses a MIME renderer that works automatically in JupyterLab 3.x and 4.x environments. No manual extension enabling is required.
 
 ## Quick Start
 
-This section provides a simple guide to get started with the project using JupyterLab.
+### NetworkX Plotter API (New in v0.5.0)
 
-### Example
+The easiest way to visualize NetworkX graphs in JupyterLab:
+
+```python
+from net_vis import Plotter
+import networkx as nx
+
+# Create a NetworkX graph
+G = nx.karate_club_graph()
+
+# Visualize with one line
+plotter = Plotter(title="Karate Club Network")
+plotter.add_networkx(G)
+```
+
+#### Custom Styling
+
+Control node colors, labels, and layouts:
+
+```python
+# Color nodes by attribute, customize labels
+plotter = Plotter(title="Styled Network")
+plotter.add_networkx(
+    G,
+    node_color="club",              # Use 'club' attribute for colors
+    node_label=lambda d: f"Node {d.get('name', '')}",  # Custom labels
+    edge_label="weight",            # Show edge weights
+    layout='kamada_kawai'           # Choose layout algorithm
+)
+```
+
+#### Supported Features
+
+- **Graph Types**: Graph, DiGraph, MultiGraph, MultiDiGraph
+- **Layouts**: spring (default), kamada_kawai, spectral, circular, random, or custom functions
+- **Styling**: Attribute-based or function-based color/label mapping
+- **Automatic**: Node/edge attribute preservation in metadata
+
+### Low-Level API (Advanced)
+
+For manual control over the visualization data structure:
 
 ```python
 import net_vis

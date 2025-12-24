@@ -4,9 +4,9 @@ net_vis
 
 Version: |release|
 
-NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless.
+NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and provides a high-level Plotter API for effortless network analysis.
 
-**Version 0.4.0** introduces a MIME renderer architecture that simplifies installation and improves compatibility with modern JupyterLab environments.
+**Version 0.5.0** introduces the NetworkX Plotter API, enabling direct visualization of NetworkX graph objects without manual JSON conversion.
 
 
 Quickstart
@@ -16,7 +16,17 @@ To get started with net_vis, install with pip::
 
     pip install net_vis
 
-**Note**: As of version 0.4.0, NetVis uses a MIME renderer that works automatically in JupyterLab 3.x and 4.x. Manual extension enabling is no longer required.
+**NetworkX Plotter API (New in v0.5.0)**::
+
+    from net_vis import Plotter
+    import networkx as nx
+
+    # Create and visualize NetworkX graph
+    G = nx.karate_club_graph()
+    plotter = Plotter(title="Karate Club Network")
+    plotter.add_networkx(G)
+
+**Note**: NetVis uses a MIME renderer that works automatically in JupyterLab 3.x and 4.x. Manual extension enabling is not required.
 
 
 Contents

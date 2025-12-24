@@ -112,10 +112,10 @@ describe('validateVersion', () => {
   });
 
   it('should log success for matching versions', () => {
-    validateVersion('0.4.0');
+    validateVersion('0.5.0');
 
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Version check passed: v0.4.0'),
+      expect.stringContaining('Version check passed: v0.5.0'),
     );
     expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
@@ -127,7 +127,7 @@ describe('validateVersion', () => {
       expect.stringContaining('Version mismatch'),
     );
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Frontend v0.4.0'),
+      expect.stringContaining('Frontend v0.5.0'),
     );
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       expect.stringContaining('Backend v0.3.0'),

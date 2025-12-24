@@ -1,5 +1,6 @@
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { Widget } from '@lumino/widgets';
+import packageJson from '../package.json';
 
 /**
  * MIME type for NetVis graph data
@@ -7,9 +8,9 @@ import { Widget } from '@lumino/widgets';
 export const MIME_TYPE = 'application/vnd.netvis+json';
 
 /**
- * Frontend package version (should match package.json)
+ * Frontend package version (automatically loaded from package.json)
  */
-const FRONTEND_VERSION = '0.4.0';
+const FRONTEND_VERSION = packageJson.version;
 
 /**
  * Parse graph data string and handle empty data case.

@@ -8,9 +8,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "net_vis"
-version = "0.4.0"
+version = "0.5.0"
 # dynamic = ["version"]
-description = "NetVis is a package for interactive visualization Python NetworkX graphs within Jupyter Lab. It leverages D3.js for dynamic rendering and supports HTML export, making network analysis effortless."
+description = "NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and provides a high-level Plotter API for effortless network analysis."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
@@ -36,9 +36,14 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
+    "networkx>=3.0",
+    "numpy>=2.0",
 ]
 
 [project.optional-dependencies]
+full = [
+    "scipy>=1.8",  # Required for kamada_kawai and spectral layouts
+]
 docs = [
     "jupyter_sphinx",
     "nbsphinx",
@@ -56,6 +61,7 @@ test = [
     "pytest>=6.0",
     "ruff>=0.8.0",
     "pyright>=1.1.0",
+    "scipy>=1.8",  # Include full dependencies for comprehensive testing
 ]
 
 [project.urls]
@@ -128,6 +134,7 @@ exclude = [
     ".venv",
     "venv",
     "venv-docker",
+    "net_vis/tests",
 ]
 pythonVersion = "3.10"
 typeCheckingMode = "basic"
