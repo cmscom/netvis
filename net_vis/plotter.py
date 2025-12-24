@@ -185,6 +185,8 @@ class Plotter:
         scene_dict = self._scene.to_dict()
 
         return {
-            "application/vnd.netvis+json": scene_dict,
+            "application/vnd.netvis+json": {
+                "data": json.dumps(scene_dict)
+            },
             "text/plain": f"<Plotter with {len(self._scene.layers)} layer(s)>"
         }

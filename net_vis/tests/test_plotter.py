@@ -1,5 +1,6 @@
 """Tests for Plotter class public API."""
 
+import json
 import pytest
 
 # Skip all tests if networkx is not installed
@@ -7,6 +8,12 @@ pytest.importorskip("networkx")
 
 import networkx as nx
 from net_vis import Plotter
+
+
+def parse_mime_data(bundle: dict) -> dict:
+    """Parse MIME bundle data to get nodes and links."""
+    mime_data = bundle["application/vnd.netvis+json"]
+    return json.loads(mime_data["data"])
 
 
 class TestPlotterInit:
@@ -96,8 +103,11 @@ class TestPlotterReprMimeBundle:
         plotter.add_networkx(G)
 
         bundle = plotter._repr_mimebundle_()
-        data = bundle["application/vnd.netvis+json"]
+        mime_data = bundle["application/vnd.netvis+json"]
 
+        # New format: data is wrapped with 'data' key as JSON string
+        assert "data" in mime_data
+        data = json.loads(mime_data["data"])
         assert "nodes" in data
         assert "links" in data
         assert len(data["nodes"]) == 2  # Nodes 1 and 2
@@ -118,7 +128,7 @@ class TestPlotterIntegration:
         assert len(plotter._scene.layers) == 1
 
         bundle = plotter._repr_mimebundle_()
-        data = bundle["application/vnd.netvis+json"]
+        data = parse_mime_data(bundle)
 
         # Karate club has 34 nodes and 78 edges
         assert len(data["nodes"]) == 34
@@ -163,7 +173,7 @@ class TestPlotterStyling:
 
         assert layer_id == "layer_0"
         bundle = plotter._repr_mimebundle_()
-        data = bundle["application/vnd.netvis+json"]
+        data = parse_mime_data(bundle)
 
         # Verify nodes have colors and labels
         assert len(data["nodes"]) == 2
@@ -190,7 +200,8 @@ class TestPlotterMultipleGraphTypes:
         assert layer_id is not None
         assert len(plotter._scene.layers) == 1
         bundle = plotter._repr_mimebundle_()
-        assert len(bundle["application/vnd.netvis+json"]["nodes"]) == 2
+        data = parse_mime_data(bundle)
+        assert len(data["nodes"]) == 2
 
     def test_plotter_accepts_digraph(self):
         """Test Plotter accepts nx.DiGraph with same API."""
@@ -203,7 +214,7 @@ class TestPlotterMultipleGraphTypes:
         assert layer_id is not None
         assert len(plotter._scene.layers) == 1
         bundle = plotter._repr_mimebundle_()
-        data = bundle["application/vnd.netvis+json"]
+        data = parse_mime_data(bundle)
         assert len(data["nodes"]) == 2
         # Verify directed edges are marked
         assert len(data["links"]) == 1
@@ -220,7 +231,7 @@ class TestPlotterMultipleGraphTypes:
         assert layer_id is not None
         assert len(plotter._scene.layers) == 1
         bundle = plotter._repr_mimebundle_()
-        data = bundle["application/vnd.netvis+json"]
+        data = parse_mime_data(bundle)
         assert len(data["nodes"]) == 2
         # Should have 2 edges (expanded)
         assert len(data["links"]) == 2
@@ -237,7 +248,7 @@ class TestPlotterMultipleGraphTypes:
         assert layer_id is not None
         assert len(plotter._scene.layers) == 1
         bundle = plotter._repr_mimebundle_()
-        data = bundle["application/vnd.netvis+json"]
+        data = parse_mime_data(bundle)
         assert len(data["nodes"]) == 2
         # Should have 2 edges (expanded)
         assert len(data["links"]) == 2
