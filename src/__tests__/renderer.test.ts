@@ -1,11 +1,14 @@
 import { NetVisRenderer } from '../renderer';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
+import packageJson from '../../package.json';
 
 // Mock MIME model type
 interface IMimeModel {
   data: { [key: string]: any };
   metadata?: { [key: string]: any };
 }
+
+const CURRENT_VERSION = packageJson.version;
 
 describe('NetVisRenderer', () => {
   const MIME_TYPE = 'application/vnd.netvis+json';
@@ -29,7 +32,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -59,7 +62,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -84,7 +87,7 @@ describe('NetVisRenderer', () => {
       const model: IMimeModel = {
         data: {
           [MIME_TYPE]: {
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -107,7 +110,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: 'invalid json',
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -132,7 +135,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -159,7 +162,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -202,7 +205,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData1,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -211,7 +214,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData2,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -249,7 +252,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -276,7 +279,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -307,7 +310,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -350,7 +353,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
@@ -391,7 +394,7 @@ describe('NetVisRenderer', () => {
         data: {
           [MIME_TYPE]: {
             data: graphData,
-            version: '0.4.0',
+            version: CURRENT_VERSION,
           },
         },
       };
