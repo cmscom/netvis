@@ -141,10 +141,8 @@ class Plotter:
             - NaN/inf positions trigger automatic fallback to random layout
         """
         # Validate input is a NetworkX graph
-        if not hasattr(graph, 'nodes') or not hasattr(graph, 'edges'):
-            raise TypeError(
-                f"Expected NetworkX graph object, got {type(graph).__name__}"
-            )
+        if not hasattr(graph, "nodes") or not hasattr(graph, "edges"):
+            raise TypeError(f"Expected NetworkX graph object, got {type(graph).__name__}")
 
         # Generate layer ID if not provided
         if layer_id is None:
@@ -187,8 +185,6 @@ class Plotter:
         scene_dict = self._scene.to_dict()
 
         return {
-            "application/vnd.netvis+json": {
-                "data": json.dumps(scene_dict)
-            },
-            "text/plain": f"<Plotter with {len(self._scene.layers)} layer(s)>"
+            "application/vnd.netvis+json": {"data": json.dumps(scene_dict)},
+            "text/plain": f"<Plotter with {len(self._scene.layers)} layer(s)>",
         }

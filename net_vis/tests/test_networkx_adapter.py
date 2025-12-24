@@ -252,7 +252,7 @@ class TestNetworkXAdapterLayouts:
         G.add_edge(1, 2)
         G.add_edge(2, 3)
 
-        layer = NetworkXAdapter.convert_graph(G, layout='spring')
+        layer = NetworkXAdapter.convert_graph(G, layout="spring")
 
         # Verify all nodes have positions
         assert len(layer.nodes) == 3
@@ -266,7 +266,7 @@ class TestNetworkXAdapterLayouts:
         G.add_edge(1, 2)
         G.add_edge(2, 3)
 
-        layer = NetworkXAdapter.convert_graph(G, layout='kamada_kawai')
+        layer = NetworkXAdapter.convert_graph(G, layout="kamada_kawai")
 
         # Verify all nodes have positions
         assert len(layer.nodes) == 3
@@ -280,7 +280,7 @@ class TestNetworkXAdapterLayouts:
         G.add_edge(1, 2)
         G.add_edge(2, 3)
 
-        layer = NetworkXAdapter.convert_graph(G, layout='spectral')
+        layer = NetworkXAdapter.convert_graph(G, layout="spectral")
 
         # Verify all nodes have positions
         assert len(layer.nodes) == 3
@@ -294,7 +294,7 @@ class TestNetworkXAdapterLayouts:
         G.add_edge(1, 2)
         G.add_edge(2, 3)
 
-        layer = NetworkXAdapter.convert_graph(G, layout='circular')
+        layer = NetworkXAdapter.convert_graph(G, layout="circular")
 
         # Verify all nodes have positions
         assert len(layer.nodes) == 3
@@ -308,7 +308,7 @@ class TestNetworkXAdapterLayouts:
         G.add_edge(1, 2)
         G.add_edge(2, 3)
 
-        layer = NetworkXAdapter.convert_graph(G, layout='random')
+        layer = NetworkXAdapter.convert_graph(G, layout="random")
 
         # Verify all nodes have positions
         assert len(layer.nodes) == 3
@@ -375,7 +375,7 @@ class TestNetworkXAdapterLayouts:
         G.add_node(2, pos=(0.7, 0.3))
         G.add_edge(1, 2)
 
-        layer = NetworkXAdapter.convert_graph(G, layout='circular')
+        layer = NetworkXAdapter.convert_graph(G, layout="circular")
 
         # Positions should be different from original pos attribute
         # (we can't predict exact values, but they should be valid floats)
@@ -392,7 +392,7 @@ class TestNetworkXAdapterLayouts:
 
         def failing_layout(graph):
             """Layout that returns NaN values."""
-            return {1: (float('nan'), 0.0), 2: (1.0, 1.0)}
+            return {1: (float("nan"), 0.0), 2: (1.0, 1.0)}
 
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
@@ -407,6 +407,7 @@ class TestNetworkXAdapterLayouts:
             assert isinstance(node.x, float)
             assert isinstance(node.y, float)
             import math
+
             assert not math.isnan(node.x)
             assert not math.isnan(node.y)
 
@@ -429,7 +430,7 @@ class TestNetworkXAdapterMultipleGraphTypes:
 
         # Verify edges don't have 'directed' flag
         for edge in layer.edges:
-            assert 'directed' not in edge.metadata or not edge.metadata['directed']
+            assert "directed" not in edge.metadata or not edge.metadata["directed"]
 
     def test_convert_graph_with_digraph(self):
         """Test NetworkXAdapter with nx.DiGraph (directed)."""
@@ -446,7 +447,7 @@ class TestNetworkXAdapterMultipleGraphTypes:
 
         # Verify all edges have 'directed' flag set to True
         for edge in layer.edges:
-            assert edge.metadata['directed'] is True
+            assert edge.metadata["directed"] is True
 
     def test_convert_graph_with_multigraph(self):
         """Test NetworkXAdapter with nx.MultiGraph (multi-undirected)."""
@@ -465,7 +466,7 @@ class TestNetworkXAdapterMultipleGraphTypes:
 
         # Verify edge keys are preserved
         for edge in layer.edges:
-            assert 'edge_key' in edge.metadata
+            assert "edge_key" in edge.metadata
 
     def test_convert_graph_with_multidigraph(self):
         """Test NetworkXAdapter with nx.MultiDiGraph (multi-directed)."""
@@ -484,8 +485,8 @@ class TestNetworkXAdapterMultipleGraphTypes:
 
         # Verify both edge keys and direction are preserved
         for edge in layer.edges:
-            assert 'edge_key' in edge.metadata
-            assert edge.metadata['directed'] is True
+            assert "edge_key" in edge.metadata
+            assert edge.metadata["directed"] is True
 
     def test_digraph_edge_direction_preserved(self):
         """Test DiGraph edge direction preserved in output."""
@@ -503,16 +504,16 @@ class TestNetworkXAdapterMultipleGraphTypes:
         edge_2_to_1 = next(e for e in layer.edges if e.source == "2" and e.target == "1")
 
         # Both should be marked as directed
-        assert edge_1_to_2.metadata['directed'] is True
-        assert edge_2_to_1.metadata['directed'] is True
+        assert edge_1_to_2.metadata["directed"] is True
+        assert edge_2_to_1.metadata["directed"] is True
 
     def test_multigraph_edge_keys_preserved(self):
         """Test MultiGraph edge keys preserved in edge metadata."""
         G = nx.MultiGraph()
         # Add multiple edges with custom keys
-        G.add_edge(1, 2, key='first', weight=1.0)
-        G.add_edge(1, 2, key='second', weight=2.0)
-        G.add_edge(1, 2, key='third', weight=3.0)
+        G.add_edge(1, 2, key="first", weight=1.0)
+        G.add_edge(1, 2, key="second", weight=2.0)
+        G.add_edge(1, 2, key="third", weight=3.0)
 
         layer = NetworkXAdapter.convert_graph(G)
 
@@ -520,10 +521,10 @@ class TestNetworkXAdapterMultipleGraphTypes:
         assert len(layer.edges) == 3
 
         # Verify all edges have edge_key preserved
-        edge_keys = [edge.metadata['edge_key'] for edge in layer.edges]
+        edge_keys = [edge.metadata["edge_key"] for edge in layer.edges]
         # NetworkX may use integer keys by default, but our custom keys should be preserved
         assert len(edge_keys) == 3
-        assert all('edge_key' in edge.metadata for edge in layer.edges)
+        assert all("edge_key" in edge.metadata for edge in layer.edges)
 
     def test_multigraph_expands_multiple_edges(self):
         """Test MultiGraph expands multiple edges to independent Edge objects."""
@@ -540,9 +541,10 @@ class TestNetworkXAdapterMultipleGraphTypes:
 
         # All edges should be between nodes "1" and "2"
         for edge in layer.edges:
-            assert (edge.source == "1" and edge.target == "2") or \
-                   (edge.source == "2" and edge.target == "1")
+            assert (edge.source == "1" and edge.target == "2") or (
+                edge.source == "2" and edge.target == "1"
+            )
 
         # Each edge should have unique edge_key
-        edge_keys = [edge.metadata['edge_key'] for edge in layer.edges]
+        edge_keys = [edge.metadata["edge_key"] for edge in layer.edges]
         assert len(set(edge_keys)) == 3  # All keys should be unique

@@ -30,14 +30,14 @@ class NetworkXAdapter:
         # Check class name to determine type
         class_name = type(graph).__name__.lower()
 
-        if 'multidigraph' in class_name:
-            return 'multidigraph'
-        elif 'multigraph' in class_name:
-            return 'multigraph'
-        elif 'digraph' in class_name:
-            return 'digraph'
+        if "multidigraph" in class_name:
+            return "multidigraph"
+        elif "multigraph" in class_name:
+            return "multigraph"
+        elif "digraph" in class_name:
+            return "digraph"
         else:
-            return 'graph'
+            return "graph"
 
     @staticmethod
     def _extract_nodes(
@@ -82,7 +82,7 @@ class NetworkXAdapter:
                 y=float(y),
                 color=color,
                 label=label,
-                metadata=node_attrs
+                metadata=node_attrs,
             )
 
             nodes.append(node)
@@ -106,9 +106,9 @@ class NetworkXAdapter:
         # Detect graph type and dispatch to appropriate extractor
         graph_type = NetworkXAdapter._detect_graph_type(graph)
 
-        if graph_type in ('multigraph', 'multidigraph'):
+        if graph_type in ("multigraph", "multidigraph"):
             return NetworkXAdapter._expand_multigraph_edges(graph, edge_label)
-        elif graph_type == 'digraph':
+        elif graph_type == "digraph":
             return NetworkXAdapter._extract_edges_digraph(graph, edge_label)
         else:
             # Basic Graph type
@@ -142,12 +142,7 @@ class NetworkXAdapter:
             label = NetworkXAdapter._map_edge_label(edge_attrs, edge_label)
 
             # Create Edge object
-            edge = Edge(
-                source=source_str,
-                target=target_str,
-                label=label,
-                metadata=edge_attrs
-            )
+            edge = Edge(source=source_str, target=target_str, label=label, metadata=edge_attrs)
 
             edges.append(edge)
 
@@ -178,18 +173,13 @@ class NetworkXAdapter:
             edge_attrs = dict(graph[source][target]) if graph[source][target] else {}
 
             # Add direction indicator to metadata for DiGraph
-            edge_attrs['directed'] = True
+            edge_attrs["directed"] = True
 
             # Apply label mapping
             label = NetworkXAdapter._map_edge_label(edge_attrs, edge_label)
 
             # Create Edge object
-            edge = Edge(
-                source=source_str,
-                target=target_str,
-                label=label,
-                metadata=edge_attrs
-            )
+            edge = Edge(source=source_str, target=target_str, label=label, metadata=edge_attrs)
 
             edges.append(edge)
 
@@ -216,7 +206,7 @@ class NetworkXAdapter:
 
         # Check if this is a directed multigraph
         graph_type = NetworkXAdapter._detect_graph_type(graph)
-        is_directed = graph_type == 'multidigraph'
+        is_directed = graph_type == "multidigraph"
 
         # MultiGraph.edges() returns (source, target, key) tuples
         for source, target, key in graph.edges(keys=True):
@@ -228,22 +218,17 @@ class NetworkXAdapter:
             edge_attrs = dict(graph[source][target][key]) if graph[source][target][key] else {}
 
             # Preserve edge key in metadata
-            edge_attrs['edge_key'] = key
+            edge_attrs["edge_key"] = key
 
             # Add direction indicator for MultiDiGraph
             if is_directed:
-                edge_attrs['directed'] = True
+                edge_attrs["directed"] = True
 
             # Apply label mapping
             label = NetworkXAdapter._map_edge_label(edge_attrs, edge_label)
 
             # Create Edge object
-            edge = Edge(
-                source=source_str,
-                target=target_str,
-                label=label,
-                metadata=edge_attrs
-            )
+            edge = Edge(source=source_str, target=target_str, label=label, metadata=edge_attrs)
 
             edges.append(edge)
 
@@ -264,8 +249,8 @@ class NetworkXAdapter:
 
         for node_id in graph.nodes():
             node_data = graph.nodes[node_id]
-            if 'pos' in node_data:
-                positions[node_id] = node_data['pos']
+            if "pos" in node_data:
+                positions[node_id] = node_data["pos"]
                 has_positions = True
 
         return positions if has_positions else None
@@ -299,8 +284,7 @@ class NetworkXAdapter:
             import scipy  # type: ignore[import-not-found]  # noqa: F401
         except ImportError:
             raise ImportError(
-                "Layout 'kamada_kawai' requires scipy. "
-                "Install with: pip install net_vis[full]"
+                "Layout 'kamada_kawai' requires scipy. Install with: pip install net_vis[full]"
             )
 
         return nx.kamada_kawai_layout(graph)
@@ -322,8 +306,7 @@ class NetworkXAdapter:
             import scipy  # type: ignore[import-not-found]  # noqa: F401
         except ImportError:
             raise ImportError(
-                "Layout 'spectral' requires scipy. "
-                "Install with: pip install net_vis[full]"
+                "Layout 'spectral' requires scipy. Install with: pip install net_vis[full]"
             )
 
         return nx.spectral_layout(graph)
@@ -383,10 +366,7 @@ class NetworkXAdapter:
         return True
 
     @staticmethod
-    def _compute_layout(
-        graph: Any,
-        layout: str | Callable | None = None
-    ) -> dict[Any, Any]:
+    def _compute_layout(graph: Any, layout: str | Callable | None = None) -> dict[Any, Any]:
         """Compute node positions using specified layout algorithm.
 
         Args:
@@ -423,15 +403,15 @@ class NetworkXAdapter:
             # Named layout algorithm
             layout_str = str(layout).lower()
             try:
-                if layout_str == 'spring':
+                if layout_str == "spring":
                     positions = NetworkXAdapter._apply_spring_layout(graph)
-                elif layout_str == 'kamada_kawai':
+                elif layout_str == "kamada_kawai":
                     positions = NetworkXAdapter._apply_kamada_kawai_layout(graph)
-                elif layout_str == 'spectral':
+                elif layout_str == "spectral":
                     positions = NetworkXAdapter._apply_spectral_layout(graph)
-                elif layout_str == 'circular':
+                elif layout_str == "circular":
                     positions = NetworkXAdapter._apply_circular_layout(graph)
-                elif layout_str == 'random':
+                elif layout_str == "random":
                     positions = NetworkXAdapter._apply_random_layout(graph)
                 else:
                     warnings.warn(f"Unknown layout '{layout}', using spring layout")
@@ -442,7 +422,9 @@ class NetworkXAdapter:
 
         # Validate positions
         if not NetworkXAdapter._validate_positions(positions):
-            warnings.warn("Layout produced invalid positions (NaN/inf), falling back to random layout")
+            warnings.warn(
+                "Layout produced invalid positions (NaN/inf), falling back to random layout"
+            )
             positions = NetworkXAdapter._apply_random_layout(graph)
 
         return positions
@@ -495,13 +477,15 @@ class NetworkXAdapter:
             layer_id="",  # Will be set by Plotter
             nodes=nodes,
             edges=edges,
-            metadata={"graph_type": graph_type}
+            metadata={"graph_type": graph_type},
         )
 
         return layer
 
     @staticmethod
-    def _map_node_color(node_id: Any, node_data: dict, mapping: str | Callable | None) -> str | None:
+    def _map_node_color(
+        node_id: Any, node_data: dict, mapping: str | Callable | None
+    ) -> str | None:
         """Map node attribute to color value.
 
         Args:
@@ -528,7 +512,9 @@ class NetworkXAdapter:
             return str(value) if value is not None else None
 
     @staticmethod
-    def _map_node_label(node_id: Any, node_data: dict, mapping: str | Callable | None) -> str | None:
+    def _map_node_label(
+        node_id: Any, node_data: dict, mapping: str | Callable | None
+    ) -> str | None:
         """Map node attribute to label value.
 
         Args:
@@ -602,8 +588,8 @@ class NetworkXAdapter:
 
         # If majority are numeric, treat as numeric
         if total_count > 0 and numeric_count / total_count > 0.5:
-            return 'numeric'
-        return 'categorical'
+            return "numeric"
+        return "categorical"
 
     @staticmethod
     def _apply_continuous_color_scale(value: float, min_val: float, max_val: float) -> str:
@@ -645,8 +631,16 @@ class NetworkXAdapter:
         """
         # D3.js Category10 palette
         palette = [
-            "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-            "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22",
+            "#17becf",
         ]
 
         # Use hash of category string to select color

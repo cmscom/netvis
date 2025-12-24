@@ -150,6 +150,7 @@ class TestPlotterIntegration:
 
         # Verify it's valid JSON
         import json
+
         data = json.loads(json_str)
         assert "nodes" in data
         assert "links" in data
@@ -271,7 +272,7 @@ class TestPlotterMultipleGraphTypes:
             # All graph types should work with same API
             layer_id = plotter.add_networkx(
                 graph,
-                layout='spring',
+                layout="spring",
                 node_color=None,
                 node_label=None,
                 edge_label=None,
