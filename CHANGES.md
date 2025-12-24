@@ -2,7 +2,7 @@
 
 ## 0.6.0 (2025-12-25)
 
-**Feature Release: Standalone HTML Export**
+**Feature Release: Standalone HTML Export** (terapyon)
 
 ### New Features
 
