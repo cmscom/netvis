@@ -25,6 +25,62 @@ export interface ExportConfig {
 }
 
 /**
+ * Normalize graph data for standalone HTML export.
+ *
+ * After D3.js simulation runs, link.source and link.target become
+ * object references instead of IDs. This function converts them back
+ * to IDs so the standalone HTML can create its own simulation.
+ *
+ * @param graphData - Graph data potentially containing object references
+ * @returns Normalized graph data with IDs for source/target
+ */
+function normalizeGraphData(graphData: {
+  nodes: any[];
+  links: any[];
+}): { nodes: any[]; links: any[] } {
+  // Normalize links: convert source/target objects back to IDs
+  const normalizedLinks = graphData.links.map((link) => {
+    const source =
+      typeof link.source === 'object' && link.source !== null
+        ? link.source.id
+        : link.source;
+    const target =
+      typeof link.target === 'object' && link.target !== null
+        ? link.target.id
+        : link.target;
+
+    // Keep other link properties (weight, etc.) but exclude D3 simulation props
+    const { index: _index, ...rest } = link;
+
+    return {
+      ...rest,
+      source,
+      target,
+    };
+  });
+
+  // Normalize nodes: remove D3 simulation properties
+  const normalizedNodes = graphData.nodes.map((node) => {
+    const {
+      x: _x,
+      y: _y,
+      vx: _vx,
+      vy: _vy,
+      fx: _fx,
+      fy: _fy,
+      index: _index,
+      ...rest
+    } = node;
+    return rest;
+  });
+
+  return {
+    nodes: normalizedNodes,
+    links: normalizedLinks,
+  };
+}
+
+/**
  * Default export configuration values.
  */
 export const DEFAULT_EXPORT_CONFIG: Partial<ExportConfig> = {
@@ -54,7 +110,9 @@ export function generateStandaloneHtml(config: ExportConfig): string {
   const title = config.title || DEFAULT_EXPORT_CONFIG.title!;
   const width = config.width || DEFAULT_EXPORT_CONFIG.width!;
   const height = config.height || DEFAULT_EXPORT_CONFIG.height!;
-  const graphData = config.graphData;
+
+  // Normalize graph data to ensure source/target are IDs, not object references
+  const graphData = normalizeGraphData(config.graphData);
 
   // Serialize graph data as JSON
   const jsonData = JSON.stringify(graphData);
