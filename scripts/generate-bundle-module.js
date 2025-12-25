@@ -5,7 +5,9 @@
  * This script reads the built netvis-standalone.min.js and generates
  * a TypeScript file that exports the bundle content as a string constant.
  *
- * Usage: node scripts/generate-bundle-module.js
+ * Usage:
+ *   node scripts/generate-bundle-module.js           # Generate from built bundle
+ *   node scripts/generate-bundle-module.js --stub    # Create placeholder stub
  *
  * Output: src/standaloneBundleContent.ts
  */
@@ -21,6 +23,24 @@ const bundlePath = path.join(
   'netvis-standalone.min.js'
 );
 const outputPath = path.join(__dirname, '..', 'src', 'standaloneBundleContent.ts');
+
+// Check if we should create a stub (placeholder)
+const isStub = process.argv.includes('--stub');
+
+if (isStub) {
+  // Create a placeholder that allows TypeScript to compile
+  const stubContent = `/**
+ * Auto-generated stub file - will be replaced with actual bundle content.
+ * DO NOT EDIT MANUALLY - regenerate with: node scripts/generate-bundle-module.js
+ */
+
+// Placeholder - will be replaced after webpack build
+export const STANDALONE_BUNDLE: string = '';
+`;
+  fs.writeFileSync(outputPath, stubContent, 'utf8');
+  console.log(`Created stub: ${outputPath}`);
+  process.exit(0);
+}
 
 // Read the bundle
 if (!fs.existsSync(bundlePath)) {

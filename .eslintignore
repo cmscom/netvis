@@ -3,3 +3,5 @@ dist
 coverage
 **/*.d.ts
 tests
+# Auto-generated bundle content (see scripts/generate-bundle-module.js)
+src/standaloneBundleContent.ts
