@@ -11,6 +11,12 @@
   - Works offline without internet connection or JupyterLab
   - Preserves all interactive features (zoom, pan, node selection, drag)
 
+- **One-Click Download Button**: Download HTML directly from JupyterLab
+  - Download button appears in top-right corner of visualization
+  - Click to instantly save as `netvis_export_YYYY-MM-DD.html`
+  - Works independently of kernel state (client-side generation)
+  - No code required for quick exports
+
 - **Export Customization**:
   - Custom title and description for HTML documents
   - Configurable container width (CSS values) and height (pixels)
@@ -55,7 +61,7 @@ plotter.export_html("graph.html", download=True)
 
 - **HTMLExporter**: Template-based HTML generation using string.Template
 - **Standalone Bundle**: D3.js + rendering code bundled via webpack (~280KB)
-- **Test Coverage**: 26 new tests covering all export functionality
+- **Test Coverage**: 50 new tests (26 Python + 24 TypeScript) covering all export functionality
 - **Error Handling**: Proper exception propagation for file system errors
 
 ### Compatibility

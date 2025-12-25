@@ -5,6 +5,8 @@
  * for exporting NetVis graphs as standalone HTML files.
  */
 
+import { STANDALONE_BUNDLE } from './standaloneBundleContent';
+
 /**
  * Configuration for HTML export.
  */
@@ -60,8 +62,8 @@ export function generateStandaloneHtml(config: ExportConfig): string {
   // Generate inline CSS
   const css = generateCss();
 
-  // Generate inline JavaScript (D3.js rendering code)
-  const js = generateJs();
+  // Get the pre-built JavaScript bundle (D3.js + rendering code)
+  const js = getJsBundle();
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -215,93 +217,11 @@ function generateCss(): string {
 }
 
 /**
- * Generate JavaScript code for standalone HTML.
- * This is a minimal D3.js-based graph renderer.
+ * Get JavaScript bundle for standalone HTML.
+ *
+ * Returns the pre-built D3.js + NetVis rendering code bundle.
+ * This is the same bundle used by Python's HTMLExporter.
  */
-function generateJs(): string {
-  // For the standalone export, we need to include the D3.js bundle
-  // In the actual implementation, this would be loaded from the build
-  return `
-        // NetVis standalone renderer
-        var netvis = (function() {
-            // Minimal graph rendering (placeholder for full D3.js bundle)
-            function renderGraph(container, data) {
-                if (!container) return;
-
-                const width = container.clientWidth || 800;
-                const height = container.clientHeight || 600;
-
-                // Create SVG
-                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                svg.setAttribute('width', width);
-                svg.setAttribute('height', height);
-                svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
-                container.appendChild(svg);
-
-                // Simple force-directed layout simulation
-                const nodes = data.nodes || [];
-                const links = data.links || [];
-
-                // Initialize node positions
-                nodes.forEach(function(node, i) {
-                    node.x = node.x || width / 2 + (Math.random() - 0.5) * 200;
-                    node.y = node.y || height / 2 + (Math.random() - 0.5) * 200;
-                });
-
-                // Draw links
-                const linkGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                linkGroup.setAttribute('class', 'netvis-links');
-                svg.appendChild(linkGroup);
-
-                links.forEach(function(link) {
-                    const source = nodes.find(function(n) { return n.id === link.source || n.id === link.source.id; });
-                    const target = nodes.find(function(n) { return n.id === link.target || n.id === link.target.id; });
-                    if (source && target) {
-                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                        line.setAttribute('class', 'netvis-link');
-                        line.setAttribute('x1', source.x);
-                        line.setAttribute('y1', source.y);
-                        line.setAttribute('x2', target.x);
-                        line.setAttribute('y2', target.y);
-                        line.setAttribute('stroke', '#999');
-                        line.setAttribute('stroke-opacity', '0.6');
-                        linkGroup.appendChild(line);
-                    }
-                });
-
-                // Draw nodes
-                const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                nodeGroup.setAttribute('class', 'netvis-nodes');
-                svg.appendChild(nodeGroup);
-
-                nodes.forEach(function(node) {
-                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                    g.setAttribute('class', 'netvis-node');
-                    g.setAttribute('transform', 'translate(' + node.x + ',' + node.y + ')');
-
-                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    circle.setAttribute('r', 8);
-                    circle.setAttribute('fill', node.color || '#69b3a2');
-                    circle.setAttribute('stroke', '#fff');
-                    circle.setAttribute('stroke-width', '1.5');
-                    g.appendChild(circle);
-
-                    if (node.name || node.label) {
-                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                        text.setAttribute('class', 'netvis-node-label');
-                        text.setAttribute('dx', '12');
-                        text.setAttribute('dy', '4');
-                        text.textContent = node.name || node.label;
-                        g.appendChild(text);
-                    }
-
-                    nodeGroup.appendChild(g);
-                });
-            }
-
-            return {
-                renderGraph: renderGraph
-            };
-        })();
-  `;
+function getJsBundle(): string {
+  return STANDALONE_BUNDLE;
 }

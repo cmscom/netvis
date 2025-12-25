@@ -29,9 +29,9 @@
     "url": "https://github.com/cmscom/netvis"
   },
   "scripts": {
-    "build": "yarn run build:lib && yarn run build:labextension:dev",
-    "build:prod": "yarn run build:lib && yarn run build:labextension",
-    "build:standalone": "webpack --config webpack.standalone.js",
+    "build": "yarn run build:standalone && yarn run build:lib && yarn run build:labextension:dev",
+    "build:prod": "yarn run build:standalone && yarn run build:lib && yarn run build:labextension",
+    "build:standalone": "webpack --config webpack.standalone.js && node scripts/generate-bundle-module.js",
     "build:labextension": "jupyter labextension build .",
     "build:labextension:dev": "jupyter labextension build --development True .",
     "build:lib": "tsc",

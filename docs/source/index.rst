@@ -41,6 +41,8 @@ To get started with net_vis, install with pip::
     # Get HTML as string for embedding
     html = plotter.export_html()
 
+**One-Click Download Button**: When viewing a graph in JupyterLab, click the download button (top-right corner) to instantly save the visualization as an HTML file.
+
 **Note**: NetVis uses a MIME renderer that works automatically in JupyterLab 3.x and 4.x. Manual extension enabling is not required.
 
 
