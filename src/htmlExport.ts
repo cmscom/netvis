@@ -34,10 +34,10 @@ export interface ExportConfig {
  * @param graphData - Graph data potentially containing object references
  * @returns Normalized graph data with IDs for source/target
  */
-function normalizeGraphData(graphData: {
+function normalizeGraphData(graphData: { nodes: any[]; links: any[] }): {
   nodes: any[];
   links: any[];
-}): { nodes: any[]; links: any[] } {
+} {
   // Normalize links: convert source/target objects back to IDs
   const normalizedLinks = graphData.links.map((link) => {
     const source =
