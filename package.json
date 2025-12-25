@@ -1,6 +1,6 @@
 {
   "name": "net_vis",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and provides a high-level Plotter API for effortless network analysis.",
   "keywords": [
     "jupyter",
@@ -29,8 +29,9 @@
     "url": "https://github.com/cmscom/netvis"
   },
   "scripts": {
-    "build": "yarn run build:lib && yarn run build:labextension:dev",
-    "build:prod": "yarn run build:lib && yarn run build:labextension",
+    "build": "yarn run build:standalone && yarn run build:lib && yarn run build:labextension:dev",
+    "build:prod": "yarn run build:standalone && yarn run build:lib && yarn run build:labextension",
+    "build:standalone": "node scripts/generate-bundle-module.js --stub && webpack --config webpack.standalone.js && node scripts/generate-bundle-module.js",
     "build:labextension": "jupyter labextension build .",
     "build:labextension:dev": "jupyter labextension build --development True .",
     "build:lib": "tsc",

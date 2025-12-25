@@ -155,6 +155,9 @@ net_vis/nbextension/index.*
 # Packed lab extensions
 net_vis/labextension
 
+# Auto-generated bundle content for TypeScript
+src/standaloneBundleContent.ts
+
 VSCode
 
 *.code-workspace

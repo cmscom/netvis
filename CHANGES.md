@@ -1,5 +1,76 @@
 # Changelog
 
+## 0.6.0 (2025-12-25)
+
+**Feature Release: Standalone HTML Export** (terapyon)
+
+### New Features
+
+- **HTML Export API**: Export visualizations as self-contained HTML files
+  - `Plotter.export_html()` method for saving graphs as standalone HTML
+  - Works offline without internet connection or JupyterLab
+  - Preserves all interactive features (zoom, pan, node selection, drag)
+
+- **One-Click Download Button**: Download HTML directly from JupyterLab
+  - Download button appears in top-right corner of visualization
+  - Click to instantly save as `netvis_export_YYYY-MM-DD.html`
+  - Works independently of kernel state (client-side generation)
+  - No code required for quick exports
+
+- **Export Customization**:
+  - Custom title and description for HTML documents
+  - Configurable container width (CSS values) and height (pixels)
+  - Default responsive layout (100% width x 600px height)
+
+- **Flexible Output Options**:
+  - File export with automatic .html extension
+  - Automatic parent directory creation
+  - HTML string return for programmatic use
+  - Browser download trigger for remote environments (JupyterHub, Google Colab)
+
+### API Examples
+
+```python
+from net_vis import Plotter
+import networkx as nx
+
+G = nx.karate_club_graph()
+plotter = Plotter(title="Karate Club")
+plotter.add_networkx(G)
+
+# Export to file
+path = plotter.export_html("my_graph.html")
+
+# Export with customization
+plotter.export_html(
+    "report.html",
+    title="Network Analysis",
+    description="Karate club social network",
+    width="800px",
+    height=700
+)
+
+# Get HTML string
+html = plotter.export_html()
+
+# Remote environment download
+plotter.export_html("graph.html", download=True)
+```
+
+### Implementation Details
+
+- **HTMLExporter**: Template-based HTML generation using string.Template
+- **Standalone Bundle**: D3.js + rendering code bundled via webpack (~280KB)
+- **Test Coverage**: 50 new tests (26 Python + 24 TypeScript) covering all export functionality
+- **Error Handling**: Proper exception propagation for file system errors
+
+### Compatibility
+
+- All modern browsers (Chrome, Firefox, Safari, Edge)
+- Offline capable (no CDN or internet dependency)
+- JupyterLab: 3.x and 4.x
+- Python: 3.10+
+
 ## 0.5.0 (2025-12-24)
 
 **Major Feature Release: NetworkX Plotter API** (terapyon)

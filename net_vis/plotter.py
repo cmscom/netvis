@@ -2,9 +2,11 @@
 
 import json
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 from .adapters.networkx_adapter import NetworkXAdapter
+from .html_exporter import ExportOptions, HTMLExporter
 from .models import Scene
 
 
@@ -188,3 +190,137 @@ class Plotter:
             "application/vnd.netvis+json": {"data": json.dumps(scene_dict)},
             "text/plain": f"<Plotter with {len(self._scene.layers)} layer(s)>",
         }
+
+    def export_html(
+        self,
+        filepath: str | Path | None = None,
+        *,
+        title: str | None = None,
+        description: str | None = None,
+        width: str = "100%",
+        height: int = 600,
+        download: bool = False,
+    ) -> str | Path:
+        """Export visualization as standalone HTML.
+
+        Generates a self-contained HTML document that includes all necessary
+        JavaScript (D3.js), CSS, and data to render the graph visualization
+        without any external dependencies or internet connection.
+
+        Args:
+            filepath: Output file path. If None, returns HTML as string.
+                - Supports str or pathlib.Path
+                - Automatically adds .html extension if missing
+                - Creates parent directories if they don't exist
+            title: Custom title for the HTML document.
+                - Appears in browser tab and as page heading
+                - Overrides Scene.title if provided
+                - If both are None, defaults to "Network Visualization"
+            description: Description text to display below the title.
+                - Rendered as paragraph element
+                - If None, description section is omitted
+            width: Container width as CSS value.
+                - Default: "100%" (responsive)
+                - Examples: "800px", "50vw", "100%"
+            height: Container height in pixels.
+                - Default: 600
+                - Must be positive integer
+            download: If True, trigger browser download (for remote environments).
+                - Useful in JupyterHub, Google Colab, Binder
+                - Uses IPython display mechanism
+
+        Returns:
+            - If filepath is provided: Path object of written file
+            - If filepath is None: HTML content as string
+
+        Raises:
+            OSError: If file write fails (permission denied, disk full, etc.)
+            ValueError: If height is not a positive integer
+
+        Examples:
+            Export to file:
+                >>> plotter = Plotter()
+                >>> plotter.add_networkx(G)
+                >>> path = plotter.export_html("my_graph.html")
+                >>> print(f"Exported to {path}")
+
+            Export with customization:
+                >>> plotter.export_html(
+                ...     "report.html",
+                ...     title="Network Analysis Report",
+                ...     description="Generated on 2025-12-24",
+                ...     width="800px",
+                ...     height=800
+                ... )
+
+            Get HTML string:
+                >>> html = plotter.export_html()
+                >>> # Use html string in web application, email, etc.
+
+        Notes:
+            - Exported HTML works offline (no internet required)
+            - All modern browsers supported (Chrome, Firefox, Safari, Edge)
+            - Interactive features preserved (zoom, pan, node selection)
+            - File size depends on graph complexity (data embedded as JSON)
+        """
+        # Validate height
+        if not isinstance(height, int) or height <= 0:
+            raise ValueError("height must be a positive integer")
+
+        # Create export options
+        options = ExportOptions(
+            title=title,
+            description=description,
+            width=width,
+            height=height,
+        )
+
+        # Generate HTML using exporter
+        exporter = HTMLExporter()
+        html = exporter.export(self._scene, options)
+
+        # If no filepath, return HTML string
+        if filepath is None:
+            return html
+
+        # Handle file path
+        path = Path(filepath)
+
+        # Auto-add .html extension if missing
+        if path.suffix.lower() != ".html":
+            path = path.with_suffix(path.suffix + ".html")
+
+        # Create parent directories if needed
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Write file
+        path.write_text(html, encoding="utf-8")
+
+        # Handle download for remote environments
+        if download:
+            self._trigger_download(path)
+
+        return path
+
+    def _trigger_download(self, filepath: Path) -> None:
+        """Trigger browser download for remote environments.
+
+        Uses IPython display mechanism to trigger file download.
+        Falls back gracefully if IPython is not available.
+
+        Args:
+            filepath: Path to the file to download
+        """
+        try:
+            from IPython.display import FileLink, display  # type: ignore[import-not-found]
+
+            display(FileLink(str(filepath)))
+        except ImportError:
+            # IPython not available, skip download trigger
+            import warnings
+
+            warnings.warn(
+                "IPython not available. File saved but download not triggered. "
+                f"File location: {filepath}",
+                stacklevel=2,
+            )

@@ -8,6 +8,8 @@ NetVis is a package for interactive visualization of Python NetworkX graphs with
 Key Features
 ------------
 
+- **Standalone HTML Export (v0.6.0)**: Export visualizations as self-contained HTML files that work offline
+- **One-Click Download Button (v0.6.0)**: Download HTML directly from JupyterLab visualization with a single click
 - **NetworkX Plotter API (v0.5.0)**: Direct visualization of NetworkX graphs without JSON conversion
 - **Interactive D3.js Visualization**: Force-directed graph layout with interactive node dragging, zooming, and panning
 - **Multiple Graph Types**: Support for Graph, DiGraph, MultiGraph, and MultiDiGraph
@@ -105,6 +107,50 @@ Version 0.5.0 introduces the **NetworkX Plotter API**, a high-level interface fo
     - Automatic graph type detection and dispatch
 
 See the :doc:`examples/index` for complete usage examples.
+
+
+What's New in 0.6.0
+-------------------
+
+Version 0.6.0 introduces **Standalone HTML Export**, enabling you to share visualizations without JupyterLab:
+
+**HTML Export API**
+    Export visualizations as self-contained HTML files::
+
+        # Export to file
+        plotter.export_html("my_graph.html")
+
+        # Export with customization
+        plotter.export_html(
+            "report.html",
+            title="Network Analysis Report",
+            description="Generated analysis results",
+            width="800px",
+            height=700
+        )
+
+        # Get HTML as string for embedding
+        html = plotter.export_html()
+
+**One-Click Download Button**
+    When viewing a graph in JupyterLab, a download button appears in the top-right corner:
+
+    - Click the button to instantly download the visualization as HTML
+    - Files are automatically named ``netvis_export_YYYY-MM-DD.html``
+    - Works even when the kernel is stopped (client-side generation)
+    - No code required for quick exports
+
+**Exported HTML Features**
+    - Works offline (no internet connection required)
+    - All JavaScript and CSS embedded inline
+    - Interactive features preserved (zoom, pan, node dragging)
+    - Opens in any modern browser (Chrome, Firefox, Safari, Edge)
+
+**Remote Environment Support**
+    For JupyterHub, Google Colab, or Binder environments::
+
+        # Trigger browser download to local PC
+        plotter.export_html("graph.html", download=True)
 
 
 Architecture (v0.4.0)

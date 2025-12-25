@@ -8,7 +8,7 @@ This section contains examples of using NetVis for interactive graph visualizati
 NetworkX Plotter API (Recommended)
 -----------------------------------
 
-**New in v0.5.0**: The easiest way to visualize NetworkX graphs::
+The easiest way to visualize NetworkX graphs::
 
     from net_vis import Plotter
     import networkx as nx
@@ -19,6 +19,32 @@ NetworkX Plotter API (Recommended)
     plotter.add_networkx(G)
 
 For comprehensive examples including custom styling, layouts, and multi-graph support, see the :ref:`NetworkX Plotter API notebook <networkx_plotter>` below.
+
+
+HTML Export (New in v0.6.0)
+---------------------------
+
+Export visualizations as self-contained HTML files::
+
+    # Export to file
+    plotter.export_html("my_graph.html")
+
+    # Export with customization
+    plotter.export_html(
+        "report.html",
+        title="Network Analysis",
+        description="Generated from NetworkX graph",
+        width="800px",
+        height=700
+    )
+
+    # Get HTML as string
+    html = plotter.export_html()
+
+    # Browser download for remote environments
+    plotter.export_html("graph.html", download=True)
+
+The exported HTML files work offline and include all interactive features. See the :ref:`HTML Export notebook <html_export>` for more examples.
 
 
 Low-Level API
@@ -91,4 +117,5 @@ Detailed Examples
     :maxdepth: 2
 
     networkx_plotter
+    html_export
     introduction

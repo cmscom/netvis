@@ -1,6 +1,7 @@
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { Widget } from '@lumino/widgets';
 import packageJson from '../package.json';
+import { createDownloadButton } from './htmlExport';
 
 /**
  * MIME type for NetVis graph data
@@ -115,8 +116,28 @@ export class NetVisMimeRenderer
       // Clear any existing content
       this.node.textContent = '';
 
+      // Add download button styles if not already present
+      this._ensureDownloadButtonStyles();
+
+      // Create container for relative positioning of button
+      const container = document.createElement('div');
+      container.style.position = 'relative';
+      container.style.width = '100%';
+      container.style.height = '100%';
+      this.node.appendChild(container);
+
+      // Create graph container
+      const graphContainer = document.createElement('div');
+      graphContainer.style.width = '100%';
+      graphContainer.style.height = '100%';
+      container.appendChild(graphContainer);
+
+      // Create and add download button
+      const downloadButton = createDownloadButton(graphData);
+      container.appendChild(downloadButton);
+
       // Render the graph (handles empty graphs gracefully)
-      renderGraph(this.node, graphData);
+      renderGraph(graphContainer, graphData);
     } catch (error: any) {
       console.error('Error rendering NetVis graph:', error);
       this.node.innerHTML = `
@@ -126,6 +147,50 @@ export class NetVisMimeRenderer
         </div>
       `;
     }
+  }
+
+  /**
+   * Ensure download button CSS styles are added to the document.
+   */
+  private _ensureDownloadButtonStyles(): void {
+    const styleId = 'netvis-download-btn-styles';
+    if (document.getElementById(styleId)) {
+      return; // Styles already added
+    }
+
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      .netvis-download-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 4px;
+        background-color: rgba(255, 255, 255, 0.9);
+        cursor: pointer;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
+      }
+      .netvis-download-btn:hover {
+        background-color: #e0e0e0;
+      }
+      .netvis-download-btn:focus {
+        outline: 2px solid #0066cc;
+        outline-offset: 2px;
+      }
+      .netvis-download-btn svg {
+        width: 20px;
+        height: 20px;
+        stroke: #333;
+      }
+    `;
+    document.head.appendChild(style);
   }
 }
 

@@ -2,7 +2,7 @@
 
 NetVis is a package for interactive visualization of Python NetworkX graphs within JupyterLab. It leverages D3.js for dynamic rendering and provides a high-level Plotter API for effortless network analysis.
 
-**Version 0.5.0** introduces the NetworkX Plotter API, enabling direct visualization of NetworkX graph objects without manual JSON conversion.
+**Version 0.6.0** adds standalone HTML export, enabling you to share visualizations as self-contained HTML files that work anywhere—no JupyterLab or internet connection required.
 
 ## Installation
 
@@ -68,6 +68,48 @@ plotter.add_networkx(
 - **Layouts**: spring (default), kamada_kawai, spectral, circular, random, or custom functions
 - **Styling**: Attribute-based or function-based color/label mapping
 - **Automatic**: Node/edge attribute preservation in metadata
+
+#### HTML Export (New in v0.6.0)
+
+Export your visualizations as standalone HTML files:
+
+```python
+# Export to file
+path = plotter.export_html("my_graph.html")
+print(f"Exported to {path}")
+
+# Export with customization
+plotter.export_html(
+    "report.html",
+    title="Network Analysis Report",
+    description="Generated from NetworkX graph",
+    width="800px",
+    height=700
+)
+
+# Get HTML as string for embedding
+html = plotter.export_html()
+```
+
+The exported HTML files:
+- Work offline (no internet required)
+- Include all interactive features (zoom, pan, node selection)
+- Are self-contained (no external dependencies)
+- Open in any modern browser
+
+#### One-Click Download Button (New in v0.6.0)
+
+When viewing a graph in JupyterLab, you'll see a download button in the top-right corner of the visualization. Click it to instantly download the graph as a standalone HTML file:
+
+- **No code needed**: Just click the button
+- **Works offline**: Button works even if the kernel is stopped
+- **Auto-named**: Files are saved as `netvis_export_YYYY-MM-DD.html`
+
+| Use Case | Method |
+|----------|--------|
+| Quick download | Click the download button |
+| Custom filename | `plotter.export_html("my_name.html")` |
+| Programmatic export | `html = plotter.export_html()` |
 
 ### Low-Level API (Advanced)
 

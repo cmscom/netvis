@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$title</title>
+    <style>
+$css_styles
+    </style>
+</head>
+<body>
+    <div class="netvis-container">
+        <h1 class="netvis-title" id="netvis-title">$display_title</h1>
+        <p class="netvis-description" id="netvis-description">$description</p>
+        <div id="netvis-graph" style="width: $width; height: ${height}px;"></div>
+    </div>
+    <script>
+$js_bundle
+    </script>
+    <script>
+        (function() {
+            // Hide title/description if empty
+            var titleEl = document.getElementById('netvis-title');
+            var descEl = document.getElementById('netvis-description');
+            if (titleEl && !titleEl.textContent.trim()) {
+                titleEl.style.display = 'none';
+            }
+            if (descEl && !descEl.textContent.trim()) {
+                descEl.style.display = 'none';
+            }
+
+            // Initialize graph
+            var graphData = $json_data;
+            var container = document.getElementById('netvis-graph');
+            if (container && netvis && netvis.renderGraph) {
+                netvis.renderGraph(container, graphData);
+            }
+        })();
+    </script>
+</body>
+</html>
