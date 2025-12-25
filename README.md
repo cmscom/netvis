@@ -97,6 +97,20 @@ The exported HTML files:
 - Are self-contained (no external dependencies)
 - Open in any modern browser
 
+#### One-Click Download Button (New in v0.6.0)
+
+When viewing a graph in JupyterLab, you'll see a download button in the top-right corner of the visualization. Click it to instantly download the graph as a standalone HTML file:
+
+- **No code needed**: Just click the button
+- **Works offline**: Button works even if the kernel is stopped
+- **Auto-named**: Files are saved as `netvis_export_YYYY-MM-DD.html`
+
+| Use Case | Method |
+|----------|--------|
+| Quick download | Click the download button |
+| Custom filename | `plotter.export_html("my_name.html")` |
+| Programmatic export | `html = plotter.export_html()` |
+
 ### Low-Level API (Advanced)
 
 For manual control over the visualization data structure:
